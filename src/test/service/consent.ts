@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 import 'mocha'
-import * as consent from '../../src/service/consent'
+import * as service from '../../src/service/consent'
 
 describe('service', function() {
     describe('consent', function() {
@@ -9,9 +9,20 @@ describe('service', function() {
         const consentId = 'consentId'
         const scopeDetails = {consentId}
         const tppId = 'tppId'
+        const consent = {psuId, scope, scope_details: scopeDetails, tppId}
         describe('post', function() {
             it('should return id', function() {
-                expect(consent.post({psuId, scope, scope_details: scopeDetails, tppId})).to.be.not.empty
+                expect(service.post(consent)).to.be.not.empty
+            })
+        })
+        describe('get', function() {
+            it('should return consent by id', function() {
+                const id = service.post(consent)
+                expect(service.get(id)).to.be.equals(consent)
+            })
+            it('should return undefined for unknown id', function() {
+                const id = 'unknown'
+                expect(service.get(id)).to.be.undefined
             })
         })
     })

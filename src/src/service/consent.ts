@@ -26,3 +26,7 @@ export function post(consent: Consent): string {
     consentByTppIdAndConsentId[consent.tppId][consent.scope_details.consentId] = consent
     return internalId
 }
+
+export function get(id: string): Consent {
+    return consentById[id]
+}
