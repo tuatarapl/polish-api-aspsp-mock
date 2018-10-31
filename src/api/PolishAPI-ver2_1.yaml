@@ -1746,7 +1746,6 @@ definitions:
       - redirect_uri
       - scope_details
       - state
-      - ipAddress
     properties:
       requestHeader:
         $ref: "#/definitions/RequestHeaderWithoutTokenAS"
@@ -1787,12 +1786,9 @@ definitions:
     type: object
     required:
       - requestHeader
-      - requestId
       - response_type
       - eatCode
       - client_id
-      - callbackURL
-      - apiKey
       - scope_details
     properties:
       requestHeader:
@@ -2084,9 +2080,6 @@ definitions:
     allOf:
       - "$ref": "#/definitions/ItemInfoRequestBase"
       - type: object
-        required: 
-          - requestHeader
-          - accountNumber
         properties: 
           type:
             type: string
@@ -2101,9 +2094,6 @@ definitions:
     allOf:
       - "$ref": "#/definitions/ItemInfoRequestBase"
       - type: object  
-        required: 
-          - requestHeader
-          - accountNumber
         properties: 
           type:
             type: string
@@ -2153,9 +2143,6 @@ definitions:
     allOf:
       - "$ref": "#/definitions/ItemInfoBase"
       - type: object
-        required:
-          - itemId
-          - amount
         properties:
           holdExpirationDate:
             type: string
@@ -2175,8 +2162,6 @@ definitions:
       - "$ref": "#/definitions/ItemInfoBase"
       - type: object  
         required:
-          - itemId
-          - amount
           - transactionCategory
         properties:
           transactionCategory:
@@ -2199,8 +2184,6 @@ definitions:
       - "$ref": "#/definitions/ItemInfoBase"
       - type: object
         required:
-          - itemId
-          - amount
           - transactionCategory
         properties:
           transactionCategory:
@@ -2231,8 +2214,6 @@ definitions:
       - "$ref": "#/definitions/ItemInfoBase"
       - type: object  
         required:
-          - itemId
-          - amount
           - transactionCategory
         properties:
           transactionCategory:
@@ -2266,8 +2247,6 @@ definitions:
       - "$ref": "#/definitions/ItemInfoBase"
       - type: object  
         required:
-          - itemId
-          - amount
           - transactionCategory
         properties:
           transactionCategory:
@@ -2293,8 +2272,6 @@ definitions:
       - "$ref": "#/definitions/ItemInfoBase"
       - type: object  
         required:
-          - itemId
-          - amount
           - transactionCategory
         properties:
           transactionCategory:
@@ -2318,8 +2295,6 @@ definitions:
     description: "Klasa odpowiedzi zawierająca listę transakcji done / Done Transaction Information Response Class"
     required:
       - responseHeader
-      - bookingDate
-      - postTransactionBalance
     properties:
       responseHeader:
         $ref: "#/definitions/ResponseHeader"
@@ -3268,9 +3243,6 @@ definitions:
       - type: object  
         required:
           - responseHeader
-          - paymentId
-          - generalStatus
-          - detailedStatus
         properties:
           responseHeader:
             $ref: "#/definitions/ResponseHeader"
@@ -3438,7 +3410,8 @@ definitions:
       - "$ref": "#/definitions/RequestHeaderWithoutTokenAS"
       - type: object  
         required:
-          - callbackURL, apiKey
+          - callbackURL
+          - apiKey
         properties:
           callbackURL:
             type: string
@@ -3663,9 +3636,6 @@ definitions:
     allOf:
       - "$ref": "#/definitions/TransferDataBase"
       - type: object  
-        required: 
-          - description
-          - amount
         properties: 
           currency:
             type: string
@@ -3677,8 +3647,6 @@ definitions:
       - "$ref": "#/definitions/TransferDataBase"
       - type: object  
         required: 
-          - description
-          - amount
           - currency
         properties: 
           currency:
@@ -3691,7 +3659,6 @@ definitions:
       - "$ref": "#/definitions/TransferDataBaseTax"
       - type: object  
         required: 
-          - amount
           - currency
         properties: 
           currency:
