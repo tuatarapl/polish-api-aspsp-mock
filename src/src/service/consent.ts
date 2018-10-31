@@ -30,3 +30,7 @@ export function post(consent: Consent): string {
 export function get(id: string): Consent {
     return consentById[id]
 }
+
+export function findByByTppIdAndConsentId(tppId: string, consentId: string): Consent {
+    return (consentByTppIdAndConsentId[tppId] || {} )[consentId]
+}

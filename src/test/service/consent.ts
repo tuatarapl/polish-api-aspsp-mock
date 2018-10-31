@@ -25,5 +25,19 @@ describe('service', function() {
                 expect(service.get(id)).to.be.undefined
             })
         })
+        describe('findByByTppIdAndConsentId', function() {
+            it('should return consent by id', function() {
+                const id = service.post(consent)
+                expect(service.findByByTppIdAndConsentId(tppId, consentId)).to.be.equals(consent)
+            })
+            it('should return undefined for unknown tppId', function() {
+                const id = 'unknown'
+                expect(service.findByByTppIdAndConsentId('unknown', consentId)).to.be.undefined
+            })
+            it('should return undefined for unknown consentId', function() {
+                const id = 'unknown'
+                expect(service.findByByTppIdAndConsentId(tppId, 'unknown')).to.be.undefined
+            })
+        })
     })
 })
