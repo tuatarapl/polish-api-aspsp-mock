@@ -3,11 +3,13 @@ import * as uuid4 from 'uuid/v4'
 export interface Consent {
     id?: string
     scope: string
-    psuId: string
+    psuId?: string
     tppId: string
+    redirectUri: string
     scope_details: {
         consentId: string
-    } & any
+    } & any,
+    state: string
 }
 
 const consentById: {[id: string]: Consent} = {
