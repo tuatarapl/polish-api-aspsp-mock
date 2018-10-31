@@ -9,7 +9,9 @@ describe('service', function() {
         const consentId = 'consentId'
         const scopeDetails = {consentId}
         const tppId = 'tppId'
-        const consent = {psuId, scope, scope_details: scopeDetails, tppId}
+        const redirectUri = 'redirectUri'
+        const state = 'state'
+        const consent: service.Consent = {psuId, scope, scope_details: scopeDetails, tppId, redirectUri, state}
         describe('post', function() {
             it('should return id', function() {
                 expect(service.post(consent)).to.be.not.empty
