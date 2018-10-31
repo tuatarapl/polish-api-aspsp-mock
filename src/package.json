@@ -1,0 +1,45 @@
+{
+  "name": "aspsp-mock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc mocha test/**/*.{ts,tsx}",
+    "build": "rm -rf target && tsc",
+    "format": "tslint 'src/**/*.ts' --fix",
+    "lint": "tslint 'src/**/*.ts'",
+    "start": "node target"
+  },
+  "nyc": {
+    "all": true,
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "include": [
+      "src/**/*"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ],
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ]
+  },
+  "author": "Grzegorz Abramczyk <grzegorz.abramczyk@tuatara.pl>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "typescript": "^3.1.4"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "swagger-tools": "^0.10.4"
+  }
+}
