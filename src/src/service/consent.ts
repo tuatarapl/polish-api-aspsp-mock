@@ -34,3 +34,10 @@ export function get(id: string): Consent {
 export function findByByTppIdAndConsentId(tppId: string, consentId: string): Consent {
     return (consentByTppIdAndConsentId[tppId] || {} )[consentId]
 }
+
+export function put(id: string, consent: Consent) {
+    consent.id = id
+    consentById[id] = consent
+    consentByTppIdAndConsentId[consent.tppId] = consentByTppIdAndConsentId[consent.tppId] || {}
+    consentByTppIdAndConsentId[consent.tppId][consent.scope_details.consentId] = consent
+}
