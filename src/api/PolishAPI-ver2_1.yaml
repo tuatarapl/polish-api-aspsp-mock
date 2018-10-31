@@ -3,10 +3,9 @@ info:
   version: "2_1"
   title: "Polish API"
   description: "Interface specification for services provided by third parties based on access to payment accounts. Prepared by the Polish Bank Association and its affiliates"
-host: apiHost
 basePath: /
 schemes:
-  - https
+  - http
 consumes:
   - application/json
 produces:
@@ -32,20 +31,15 @@ parameters:
     in: header
     required: true
     type: string
-    enum:
-      - gzip
-      - deflate
     description: "Gzip, deflate"
   acceptLanguageParam:
     name: Accept-Language
     in: header
-    required: true
     type: string
     description: "Prefered language of response"
   acceptCharsetParam:
     name: Accept-Charset
     in: header
-    required: true
     type: string
     enum:
       - utf-8
