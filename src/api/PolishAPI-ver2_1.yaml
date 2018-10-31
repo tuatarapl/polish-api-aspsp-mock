@@ -41,8 +41,6 @@ parameters:
     name: Accept-Charset
     in: header
     type: string
-    enum:
-      - utf-8
     description: "UTF-8"
   xjwsSignatureParam:
     name: X-JWS-SIGNATURE
