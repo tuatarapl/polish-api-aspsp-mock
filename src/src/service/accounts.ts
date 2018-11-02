@@ -1,3 +1,4 @@
+import * as _ from 'lodash'
 export interface DictionaryItem {
     code: string
     description: string
@@ -40,12 +41,14 @@ export interface AccountInfo {
 }
 
 export interface Accounts {
-    [user: string]: Array<AccountBaseInfo & AccountInfo>
+    [user: string]: {
+        [accountnumber: string]: Array<AccountBaseInfo & AccountInfo>
+    }
 }
 let accounts: Accounts = {}
 
 export function getAccounts(user: string): AccountBaseInfo[] {
-    return accounts[user]
+    return _(accounts[user]).values().flatten().value()
 }
 
 export function setupAccounts(newAccounts: Accounts) {
