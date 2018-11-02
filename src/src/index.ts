@@ -7,12 +7,12 @@ import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import * as path from 'path'
 import * as swagger from 'swagger-tools'
+import './loader'
 import {Consent, get as getConsent, put as putConsent} from './service/consent'
-import {generateAccessCode,generateToken} from './service/token'
+import {generateAccessCode, generateToken, lookupToken, TokenData} from './service/token'
 const trace = debug('aspsp-mock')
 const port = process.env.LISTEN_PORT || 3000
 const app = express()
-const polishAPISpecification = yaml.safeLoad(fs.readFileSync('api/PolishAPI-ver2_1.yaml', 'UTF-8'))
 
 app.get('/confirmConsent', (req, res) => {
     trace('/confirmConsent')
@@ -27,7 +27,10 @@ app.get('/confirmConsent', (req, res) => {
             if (auth) {
                 consent.psuId = auth.name
                 putConsent(id, consent)
-                const token = generateToken({consentId: id})
+                const token = generateToken({
+                    sub: auth.name,
+                    consentId: id
+                })
                 trace(`token ${token}`)
                 const accessCode = generateAccessCode(token)
                 trace(`accessCode ${accessCode}`)
@@ -48,6 +51,37 @@ app.get('/confirmConsent', (req, res) => {
     }
 })
 
+declare global {
+    namespace Express {
+        interface Request {
+            token: string
+            tokenData: TokenData
+            consentId: string
+            consent: Consent
+        }
+    }
+}
+
+app.use((req: Request, res, next) => {
+    if (req.headers.authorization) {
+        const parts = req.headers.authorization.split(' ')
+        if (parts.length === 2 && parts[0] === 'Bearer') {
+            const token = parts[1]
+            const tokenData = lookupToken(token)
+            req.token = token
+            req.tokenData = tokenData
+            if (tokenData.consentId) {
+                const consentId = tokenData.consentId
+                const consent = getConsent(consentId)
+                req.consentId = consentId
+                req.consent = consent
+            }
+        }
+    }
+    next()
+})
+
+const polishAPISpecification = yaml.safeLoad(fs.readFileSync('api/PolishAPI-ver2_1.yaml', 'UTF-8'))
 swagger.initializeMiddleware(polishAPISpecification, (middleware) => {
   app.use(middleware.swaggerMetadata())
   app.use(middleware.swaggerValidator({
@@ -59,6 +93,5 @@ swagger.initializeMiddleware(polishAPISpecification, (middleware) => {
   app.use(middleware.swaggerRouter({useStubs: true, controllers: path.join(__dirname, 'controllers')}))
   app.use(middleware.swaggerUi())
 })
-
 
 app.listen(port, () => trace(`Statement service mock listening on port ${port}!`))
