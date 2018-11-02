@@ -2,3 +2,4 @@ node_modules
 target
 .nyc_output
 coverage
+src/data
