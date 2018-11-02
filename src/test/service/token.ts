@@ -15,7 +15,7 @@ describe('service', function() {
             })
         })
         describe('generateAccessCode and lookupAccessCode', function() {
-            const tokenData = 'tokenData'
+            const tokenData = {sub: 'sub'}
             it('should generate token code', function() {
                 expect(service.generateToken(tokenData)).to.be.not.empty
             })
