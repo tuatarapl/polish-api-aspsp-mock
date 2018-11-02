@@ -42,13 +42,16 @@ export interface AccountInfo {
 
 export interface Accounts {
     [user: string]: {
-        [accountnumber: string]: Array<AccountBaseInfo & AccountInfo>
+        [accountNumber: string]: AccountBaseInfo & AccountInfo
     }
 }
 let accounts: Accounts = {}
 
 export function getAccounts(user: string): AccountBaseInfo[] {
     return _(accounts[user]).values().flatten().value()
+}
+export function getAccount(user: string, accountNumber: string): AccountInfo {
+    return (accounts[user] || {}) [accountNumber]
 }
 
 export function setupAccounts(newAccounts: Accounts) {
