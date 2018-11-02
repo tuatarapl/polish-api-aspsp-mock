@@ -15,20 +15,46 @@ declare module 'swagger-tools' {
         consent: Consent
     }
 }
+interface PageConfig {
+    pageId?: string
+    perPage?: number
+}
+interface PageInfo {
+    previousPage?: string
+    nextPage?: string
+}
+function  paginate<T>(items: T[], pageConfig?: PageConfig): {items: T[], pageInfo: PageInfo} {
+    pageConfig = _.assign({pageId: '0', perPage: 10}, pageConfig)
+    const start = Number.parseInt(pageConfig.pageId, 10)
+    const end = start + pageConfig.perPage
+    const previousPage = start > 0 ? (Math.max(0, start - pageConfig.perPage)).toString() : undefined
+    const nextPage = end < items.length ? ( start + pageConfig.perPage).toString() : undefined
+
+    return {
+        pageInfo: {
+            previousPage,
+            nextPage
+        },
+        items: items.slice(start, end)
+    }
+}
+
 export function getAccounts(req: Swagger20Request<any>, res: Response) {
     const getAccountsRequest = req.swagger.params.getAccountsRequest.value
     trace(`getAccountsRequest ${JSON.stringify(getAccountsRequest)}`)
     trace(`tokenData ${JSON.stringify(req.tokenData)}`)
-    const accounts = _.map(accountsService.getAccounts(req.tokenData.sub),
+    const {items: accounts, pageInfo} = paginate(_.map(accountsService.getAccounts(req.tokenData.sub),
     ({accountNumber, accountTypeName, accountType}) => ({accountNumber, accountTypeName, accountType}))
-    trace(`accounts ${accounts}`)
+    , getAccountsRequest)
+    trace(`accounts ${JSON.stringify(accounts)}`)
     const response = {
             responseHeader: {
             requestId: getAccountsRequest.requestHeader.requestId,
             sendDate: moment().toISOString(),
             isCallback: false
             },
-            accounts
+            accounts,
+            pageInfo
         }
     res.send(response)
 }
@@ -63,7 +89,7 @@ export function getAccount(req: Swagger20Request<any>, res: Response) {
             bank,
             auxData
         }))[0]
-    trace(`account ${account}`)
+    trace(`account ${JSON.stringify(account)}`)
     if (account) {
         const response = {
             responseHeader: {
