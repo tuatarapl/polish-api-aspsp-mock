@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
 import { TransactionFilter } from '../controllers/model'
 import { TransactionCancelledInfo, TransactionDetail, TransactionDetailExt,
-    TransactionInfo, TransactionKind, TransactionPendingInfo, TransactionRejectedInfo } from './model'
+    TransactionInfo, TransactionKind, TransactionPendingInfo, TransactionRejectedInfo, TransactionScheduledInfo, HoldInfo } from './model'
 interface TransactionData {
     [user: string]: {
         [accountNumber: string]: {
@@ -258,7 +258,7 @@ export function getTransactionsCancelled(user: string, accountNumber: string, fi
 }
 
 export function getTransactionsScheduled(user: string, accountNumber: string, filter: TransactionFilter):
-    TransactionCancelledInfo[] {
+    TransactionScheduledInfo[] {
     return _.map(getTransactions(user, accountNumber, filter, 'scheduled'), ({
         baseInfo: {
             itemId,
@@ -286,6 +286,39 @@ export function getTransactionsScheduled(user: string, accountNumber: string, fi
         auxData,
         transactionCategory,
         transactionStatus,
+        initiator,
+        sender,
+        recipient
+    }))
+}
+
+export function getHolds(user: string, accountNumber: string, filter: TransactionFilter):
+    HoldInfo[] {
+    return _.map(getTransactions(user, accountNumber, filter, 'hold'), ({
+        baseInfo: {
+            itemId,
+            amount,
+            currency,
+            description,
+            transactionType,
+            tradeDate,
+            mcc,
+            auxData,
+            holdExpirationDate,
+            initiator,
+            sender,
+            recipient
+        }
+    }) => ({
+        itemId,
+        amount,
+        currency,
+        description,
+        transactionType,
+        tradeDate,
+        mcc,
+        auxData,
+        holdExpirationDate,
         initiator,
         sender,
         recipient

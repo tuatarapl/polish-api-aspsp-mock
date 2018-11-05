@@ -415,5 +415,24 @@ describe('service', function() {
             })
             sharedTests(service.getTransactionsScheduled)
         })
+        describe('getHolds', function() {
+            it('should get transactions', function() {
+                expect(service.getHolds(user, accountNumber, {})).to.be.deep.equals([{
+                    itemId: itemIdHold,
+                    amount,
+                    currency,
+                    description,
+                    transactionType,
+                    tradeDate,
+                    mcc,
+                    auxData,
+                    holdExpirationDate,
+                    initiator,
+                    sender,
+                    recipient
+                }])
+            })
+            sharedTests(service.getHolds)
+        })
     })
 })
