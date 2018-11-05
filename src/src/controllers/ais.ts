@@ -6,6 +6,7 @@ import { Swagger20Request, SwaggerRequestParameters } from 'swagger-tools'
 import * as accountsService from '../service/accounts'
 import {Consent} from '../service/consent'
 import { TokenData } from '../service/token'
+import {PageConfig, PageInfo} from './model'
 const trace = debug('aspsp-mock:controllers:ais')
 declare module 'swagger-tools' {
     interface Swagger20Request<P extends SwaggerRequestParameters> {
@@ -15,14 +16,7 @@ declare module 'swagger-tools' {
         consent: Consent
     }
 }
-interface PageConfig {
-    pageId?: string
-    perPage?: number
-}
-interface PageInfo {
-    previousPage?: string
-    nextPage?: string
-}
+
 function  paginate<T>(items: T[], pageConfig?: PageConfig): {items: T[], pageInfo: PageInfo} {
     pageConfig = _.assign({pageId: '0', perPage: 10}, pageConfig)
     const start = Number.parseInt(pageConfig.pageId, 10)

@@ -205,6 +205,7 @@ export interface TransactionDetail {
     holdExpirationDate?: string
 }
 
+export type TransactionKind = 'done' | 'pending' | 'rejected' | 'cancelled' | 'scheduled' | 'hold'
 export interface TransactionDetailExt extends TransactionDetail {
     baseInfo: TransactionInfo 
         & TransactionPendingInfo 
@@ -212,5 +213,5 @@ export interface TransactionDetailExt extends TransactionDetail {
         & TransactionCancelledInfo 
         & TransactionScheduledInfo
         & HoldInfo
-    kind: 'done' | 'pending' | 'rejected' | 'cancelled' | 'scheduled' | 'hold'
+    kind: TransactionKind
 }
