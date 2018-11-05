@@ -9,7 +9,7 @@ interface Users {
 let users: Users = {}
 
 export function logIn(username: string, password: string): boolean {
-    return users[username] && users[username].password === password
+    return !!users[username] && users[username].password === password
 }
 
 export function setupUsers(newUsers: Users) {
