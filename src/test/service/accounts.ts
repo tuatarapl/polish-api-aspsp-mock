@@ -1,6 +1,7 @@
 import {expect} from 'chai'
 import 'mocha'
 import * as service from '../../src/service/accounts'
+import { AccountBaseInfo, AccountInfo } from '../../src/service/model'
 
 describe('service', function() {
     describe('accounts', function() {
@@ -16,12 +17,10 @@ describe('service', function() {
         const code = 'code'
         const description = 'description'
         const name = 'name'
-        const account: service.AccountBaseInfo & service.AccountInfo = {
+        const account: AccountBaseInfo & AccountInfo = {
             availableBalance,
             bank: {
-                address: {
-                    value: []
-                },
+                address: [],
                 bicOrSwift,
                 name
             },
