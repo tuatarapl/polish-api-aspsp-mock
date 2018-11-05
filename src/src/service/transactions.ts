@@ -1,7 +1,8 @@
 import * as _ from 'lodash'
 import { TransactionFilter } from '../controllers/model'
-import { TransactionCancelledInfo, TransactionDetail, TransactionDetailExt,
-    TransactionInfo, TransactionKind, TransactionPendingInfo, TransactionRejectedInfo, TransactionScheduledInfo, HoldInfo } from './model'
+import { HoldInfo, TransactionCancelledInfo, TransactionDetail,
+    TransactionDetailExt, TransactionInfo, TransactionKind, TransactionPendingInfo,
+    TransactionRejectedInfo, TransactionScheduledInfo } from './model'
 interface TransactionData {
     [user: string]: {
         [accountNumber: string]: {
