@@ -268,7 +268,7 @@ describe('service', function() {
         function sharedTests<T>(f: (userId: string, accountNumber: string, filter: TransactionFilter) => T[] ) {
             it('should filter out on item id', function() {
                 expect(f(user, accountNumber, {
-                    itemIdFrom: itemId + 'A'
+                    itemIdFrom: 'x'
                 })).to.be.deep.equals([])
             })
             it('should filter out on trade date', function() {
@@ -352,7 +352,28 @@ describe('service', function() {
                     recipient
                 }])
             })
-            sharedTests(service.getTransactionsDone)
+            sharedTests(service.getTransactionsPending)
+        })
+        describe('getTransactionsRejected', function() {
+            it('should get transactions', function() {
+                expect(service.getTransactionsRejected(user, accountNumber, {})).to.be.deep.equals([{
+                    itemId: itemIdRejected,
+                    amount,
+                    currency,
+                    description,
+                    transactionType,
+                    tradeDate,
+                    mcc,
+                    auxData,
+                    transactionCategory,
+                    initiator,
+                    sender,
+                    recipient,
+                    rejectionReason,
+                    rejectionDate
+                }])
+            })
+            sharedTests(service.getTransactionsRejected)
         })
     })
 })

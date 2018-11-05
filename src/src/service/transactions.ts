@@ -184,6 +184,42 @@ export function getTransactionsPending(user: string, accountNumber: string, filt
         recipient
     }))
 }
+export function getTransactionsRejected(user: string, accountNumber: string, filter: TransactionFilter):
+    TransactionInfo[] {
+    return _.map(getTransactions(user, accountNumber, filter, 'rejected'), ({
+        baseInfo: {
+            itemId,
+            amount,
+            currency,
+            description,
+            transactionType,
+            tradeDate,
+            mcc,
+            auxData,
+            transactionCategory,
+            initiator,
+            sender,
+            recipient,
+            rejectionReason,
+            rejectionDate
+        }
+    }) => ({
+        itemId,
+        amount,
+        currency,
+        description,
+        transactionType,
+        tradeDate,
+        mcc,
+        auxData,
+        transactionCategory,
+        initiator,
+        sender,
+        recipient,
+        rejectionReason,
+        rejectionDate
+    }))
+}
 
 export function setupTransactions(newTransactionData: TransactionData) {
     transactionData = newTransactionData
