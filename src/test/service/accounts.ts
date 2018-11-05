@@ -10,9 +10,19 @@ describe('service', function() {
         const accountNumber2 = 'accountNumber2'
         const availableBalance = 'availableBalance'
         const bicOrSwift = 'bicOrSwift'
+        const name = 'name'
+        const bank = {
+            address: [],
+            bicOrSwift,
+            name
+        }
         const bookingBalance = 'bookingBalance'
         const currency = 'currency'
+        const nameAddress = {
+            value: []
+        }
         const accountHolderType = 'individual'
+        const accountNameClient = 'accountNameClient'
         const accountTypeName = 'accountTypeName'
         const code = 'code'
         const description = 'description'
@@ -20,24 +30,19 @@ describe('service', function() {
             code,
             description
         }
-        const name = 'name'
+        const auxData = {}
         const account: AccountBaseInfo & AccountInfo = {
             availableBalance,
-            bank: {
-                address: [],
-                bicOrSwift,
-                name
-            },
+            bank,
             bookingBalance,
             currency,
-            nameAddress: {
-                value: []
-            },
+            nameAddress,
             accountNumber,
             accountHolderType,
+            accountNameClient,
             accountType,
             accountTypeName,
-            auxData: {}
+            auxData
         }
         service.setupAccounts({
             [user]: {
@@ -47,7 +52,19 @@ describe('service', function() {
         })
         describe('getAccount', function() {
             it('should get account', function() {
-                expect(service.getAccount(user, accountNumber)).to.be.deep.equals(account)
+                expect(service.getAccount(user, accountNumber)).to.be.deep.equals({
+                    accountNumber,
+                    nameAddress,
+                    accountType,
+                    accountTypeName,
+                    accountHolderType,
+                    accountNameClient,
+                    currency,
+                    availableBalance,
+                    bookingBalance,
+                    bank,
+                    auxData
+                })
             })
             it('should reject invalid user', function() {
                 expect(service.getAccount(`!${user}`, accountNumber)).to.be.undefined
