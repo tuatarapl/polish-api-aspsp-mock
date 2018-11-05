@@ -6,7 +6,8 @@ import { Swagger20Request, SwaggerRequestParameters } from 'swagger-tools'
 import * as accountsService from '../service/accounts'
 import {Consent} from '../service/consent'
 import { TokenData } from '../service/token'
-import {PageConfig, PageInfo} from './model'
+import * as transactionsService from '../service/transactions'
+import {PageConfig, PageInfo, TransactionFilter} from './model'
 const trace = debug('aspsp-mock:controllers:ais')
 declare module 'swagger-tools' {
     interface Swagger20Request<P extends SwaggerRequestParameters> {
@@ -81,3 +82,40 @@ export function getAccount(req: Swagger20Request<any>, res: Response) {
         res.status(404).send(response)
     }
 }
+
+function historyHandler<T>(serviceFunction: (userId: string, accountNumber: string,
+                                             filter: TransactionFilter) => T[],
+                           payloadObjectName: string, responseListName = 'transactions' ):
+                                             (req: Swagger20Request<any>, res: Response) => void {
+    return (req: Swagger20Request<any>, res: Response) => {
+        const payloadObject = req.swagger.params[payloadObjectName].value
+        trace(`${payloadObjectName} ${JSON.stringify(payloadObject)}`)
+        trace(`tokenData ${JSON.stringify(req.tokenData)}`)
+        const {items: transactions, pageInfo} = paginate(
+            serviceFunction(req.tokenData.sub, payloadObject.accountNumber, payloadObject)
+        , payloadObject)
+        trace(`transactions ${JSON.stringify(transactions)}`)
+        const response = {
+                responseHeader: {
+                requestId: payloadObject.requestHeader.requestId,
+                sendDate: moment().toISOString(),
+                isCallback: false
+                },
+                [responseListName]: transactions,
+                pageInfo
+            }
+        res.send(response)
+    }
+}
+export const getTransactionsDone =
+    historyHandler(transactionsService.getTransactionsDone, 'getTransactionsDoneRequest')
+export const getTransactionsPending =
+    historyHandler(transactionsService.getTransactionsPending, 'getTransactionsPendingRequest')
+export const getTransactionsRejected =
+    historyHandler(transactionsService.getTransactionsRejected, 'getTransactionsRejectedRequest')
+export const getTransactionsCancelled =
+    historyHandler(transactionsService.getTransactionsCancelled, 'getTransactionsCancelledRequest')
+export const getTransactionsScheduled =
+    historyHandler(transactionsService.getTransactionsScheduled, 'getTransactionsScheduledRequest')
+export const getHolds =
+    historyHandler(transactionsService.getHolds, 'getHoldsRequest', 'holds')
