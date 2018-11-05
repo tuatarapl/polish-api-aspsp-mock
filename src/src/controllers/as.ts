@@ -10,7 +10,8 @@ export function authorize(req: Swagger20Request<any>, res: Response) {
         scope_details: authorizeRequest.scope_details,
         tppId: authorizeRequest.client_id,
         redirectUri: authorizeRequest.redirect_uri,
-        state: authorizeRequest.state
+        state: authorizeRequest.state,
+        status: 'active'
     }
 
     const consentId = post(consent)
