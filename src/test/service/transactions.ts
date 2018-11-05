@@ -395,5 +395,25 @@ describe('service', function() {
             })
             sharedTests(service.getTransactionsCancelled)
         })
+        describe('getTransactionsScheduled', function() {
+            it('should get transactions', function() {
+                expect(service.getTransactionsScheduled(user, accountNumber, {})).to.be.deep.equals([{
+                    itemId: itemIdScheduled,
+                    amount,
+                    currency,
+                    description,
+                    transactionType,
+                    tradeDate,
+                    mcc,
+                    auxData,
+                    transactionCategory,
+                    transactionStatus,
+                    initiator,
+                    sender,
+                    recipient
+                }])
+            })
+            sharedTests(service.getTransactionsScheduled)
+        })
     })
 })

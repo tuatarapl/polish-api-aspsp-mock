@@ -257,6 +257,41 @@ export function getTransactionsCancelled(user: string, accountNumber: string, fi
     }))
 }
 
+export function getTransactionsScheduled(user: string, accountNumber: string, filter: TransactionFilter):
+    TransactionCancelledInfo[] {
+    return _.map(getTransactions(user, accountNumber, filter, 'scheduled'), ({
+        baseInfo: {
+            itemId,
+            amount,
+            currency,
+            description,
+            transactionType,
+            tradeDate,
+            mcc,
+            auxData,
+            transactionCategory,
+            transactionStatus,
+            initiator,
+            sender,
+            recipient
+        }
+    }) => ({
+        itemId,
+        amount,
+        currency,
+        description,
+        transactionType,
+        tradeDate,
+        mcc,
+        auxData,
+        transactionCategory,
+        transactionStatus,
+        initiator,
+        sender,
+        recipient
+    }))
+}
+
 export function setupTransactions(newTransactionData: TransactionData) {
     transactionData = newTransactionData
 }
