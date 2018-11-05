@@ -47,8 +47,8 @@ describe('service', function() {
         describe('put', function() {
             it('should create consent', function() {
                 const id = 'id'
-                service.put(id, consent)
-                expect(service.get(id)).to.be.deep.equals(consent)
+                service.put(id, {...consent, tppId: 'newTppId'})
+                expect(service.get(id)).to.be.deep.equals({...consent, id, tppId: 'newTppId'})
             })
             it('should change consent', function() {
                 const id = service.post(consent)
@@ -56,7 +56,7 @@ describe('service', function() {
                 service.put(id, {...consent, scope: newScope})
                 expect(service.get(id)).to.be.deep.equals({...consent, scope: newScope})
             })
-            it('should update ByByTppIdAndConsentId index', function() {
+            it('should update findByByTppIdAndConsentId index', function() {
                 const id = service.post(consent)
                 const newScope = 'newScope'
                 service.put(id, {...consent, scope: newScope})
