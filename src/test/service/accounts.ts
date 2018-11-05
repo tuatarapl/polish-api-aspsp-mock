@@ -16,6 +16,10 @@ describe('service', function() {
         const accountTypeName = 'accountTypeName'
         const code = 'code'
         const description = 'description'
+        const accountType = {
+            code,
+            description
+        }
         const name = 'name'
         const account: AccountBaseInfo & AccountInfo = {
             availableBalance,
@@ -31,10 +35,7 @@ describe('service', function() {
             },
             accountNumber,
             accountHolderType,
-            accountType: {
-                code,
-                description
-            },
+            accountType,
             accountTypeName,
             auxData: {}
         }
@@ -58,7 +59,8 @@ describe('service', function() {
         describe('getAccounts', function() {
             it('should get account', function() {
                 expect(service.getAccounts(user))
-                    .to.be.deep.equals([{...account}, {...account, accountNumber: accountNumber2}])
+                    .to.be.deep.equals([{accountNumber, accountTypeName, accountType},
+                        {accountNumber: accountNumber2, accountTypeName, accountType}])
             })
             it('should reject invalid user', function() {
                 expect(service.getAccounts(`!${user}`)).to.be.deep.equals([])

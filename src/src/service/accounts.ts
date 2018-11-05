@@ -9,7 +9,8 @@ export interface Accounts {
 let accounts: Accounts = {}
 
 export function getAccounts(user: string): AccountBaseInfo[] {
-    return _(accounts[user]).values().flatten().value()
+    return _(accounts[user]).values().flatten()
+        .map(({accountNumber, accountTypeName, accountType}) => ({accountNumber, accountTypeName, accountType})).value()
 }
 export function getAccount(user: string, accountNumber: string): AccountInfo {
     return (accounts[user] || {}) [accountNumber]
