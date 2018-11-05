@@ -3,6 +3,8 @@ import 'mocha'
 import { CurrencyRate, DictionaryItem, Map, NameAddress, Payor, SenderRecipient, TransactionDetailExt,
     TransactionInfoCard, TransactionInfoTax, TransactionInfoZUS } from '../../src/service/model'
 import * as service from '../../src/service/transactions'
+import { Func } from 'mocha';
+import { TransactionFilter } from '../../src/controllers/model';
 
 describe('service', function() {
     describe('transactions', function() {
@@ -263,6 +265,54 @@ describe('service', function() {
                 expect(service.getTransactionDetail(user, accountNumber, `!${itemId}`)).to.be.null
             })
         })
+        function sharedTests<T>(f: (userId: string, accountNumber: string, filter: TransactionFilter) => T[] ) {
+            it('should filter out on item id', function() {
+                expect(f(user, accountNumber, {
+                    itemIdFrom: itemId + 'A'
+                })).to.be.deep.equals([])
+            })
+            it('should filter out on trade date', function() {
+                expect(f(user, accountNumber, {
+                    transactionDateFrom: tradeDateNext
+                })).to.be.deep.equals([])
+            })
+            it('should filter out on trade date', function() {
+                expect(f(user, accountNumber, {
+                    transactionDateTo: tradeDatePrev
+                })).to.be.deep.equals([])
+            })
+            it('should filter out on booking date', function() {
+                expect(f(user, accountNumber, {
+                    bookingDateFrom: bookingDateNext
+                })).to.be.deep.equals([])
+            })
+            it('should filter out on booking date', function() {
+                expect(f(user, accountNumber, {
+                    bookingDateTo: bookingDatePrev
+                })).to.be.deep.equals([])
+            })
+            it('should filter out on amount', function() {
+                expect(f(user, accountNumber, {
+                    maxAmount: amountPrev
+                })).to.be.deep.equals([])
+            })
+            it('should filter out on amount', function() {
+                expect(f(user, accountNumber, {
+                    minAmount: amountNext
+                })).to.be.deep.equals([])
+            })
+            it('should filter out category', function() {
+                expect(f(user, accountNumber, {
+                    type: 'DEBIT'
+                })).to.be.deep.equals([])
+            })
+            it('should reject invalid user', function() {
+                expect(f(`!${user}`, accountNumber, {})).to.be.deep.equals([])
+            })
+            it('should reject invalid accountNumber', function() {
+                expect(f(user, `!${accountNumber}`, {})).to.be.deep.equals([])
+            })
+        }
         describe('getTransactionsDone', function() {
             it('should get transactions', function() {
                 expect(service.getTransactionsDone(user, accountNumber, {})).to.be.deep.equals([{
@@ -283,52 +333,7 @@ describe('service', function() {
                     postTransactionBalance
                 }])
             })
-            it('should filter out on item id', function() {
-                expect(service.getTransactionsDone(user, accountNumber, {
-                    itemIdFrom: itemId + 'A'
-                })).to.be.deep.equals([])
-            })
-            it('should filter out on trade date', function() {
-                expect(service.getTransactionsDone(user, accountNumber, {
-                    transactionDateFrom: tradeDateNext
-                })).to.be.deep.equals([])
-            })
-            it('should filter out on trade date', function() {
-                expect(service.getTransactionsDone(user, accountNumber, {
-                    transactionDateTo: tradeDatePrev
-                })).to.be.deep.equals([])
-            })
-            it('should filter out on booking date', function() {
-                expect(service.getTransactionsDone(user, accountNumber, {
-                    bookingDateFrom: bookingDateNext
-                })).to.be.deep.equals([])
-            })
-            it('should filter out on booking date', function() {
-                expect(service.getTransactionsDone(user, accountNumber, {
-                    bookingDateTo: bookingDatePrev
-                })).to.be.deep.equals([])
-            })
-            it('should filter out on amount', function() {
-                expect(service.getTransactionsDone(user, accountNumber, {
-                    maxAmount: amountPrev
-                })).to.be.deep.equals([])
-            })
-            it('should filter out on amount', function() {
-                expect(service.getTransactionsDone(user, accountNumber, {
-                    minAmount: amountNext
-                })).to.be.deep.equals([])
-            })
-            it('should filter out category', function() {
-                expect(service.getTransactionsDone(user, accountNumber, {
-                    type: 'DEBIT'
-                })).to.be.deep.equals([])
-            })
-            it('should reject invalid user', function() {
-                expect(service.getTransactionsDone(`!${user}`, accountNumber, {})).to.be.deep.equals([])
-            })
-            it('should reject invalid accountNumber', function() {
-                expect(service.getTransactionsDone(user, `!${accountNumber}`, {})).to.be.deep.equals([])
-            })
+            sharedTests(service.getTransactionsDone)
         })
     })
 })
