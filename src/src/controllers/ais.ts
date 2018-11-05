@@ -119,3 +119,34 @@ export const getTransactionsScheduled =
     historyHandler(transactionsService.getTransactionsScheduled, 'getTransactionsScheduledRequest')
 export const getHolds =
     historyHandler(transactionsService.getHolds, 'getHoldsRequest', 'holds')
+
+export function getTransactionDetail(req: Swagger20Request<any>, res: Response) {
+    const getTransactionDetailRequest = req.swagger.params.getTransationDetailRequest.value
+    trace(`getTransactionDetailRequest ${JSON.stringify(getTransactionDetailRequest)}`)
+    trace(`tokenData ${JSON.stringify(req.tokenData)}`)
+    const transaction = transactionsService.getTransactionDetail(req.tokenData.sub,
+        getTransactionDetailRequest.accountNumber, getTransactionDetailRequest.transactionId)
+    trace(`transaction ${JSON.stringify(transaction)}`)
+    if (transaction) {
+        const response = {
+            responseHeader: {
+                requestId: getTransactionDetailRequest.requestHeader.requestId,
+                sendDate: moment().toISOString(),
+                isCallback: false
+            },
+            ...transaction
+        }
+        res.send(response)
+    } else {
+        const response = {
+            responseHeader: {
+                requestId: getTransactionDetailRequest.requestHeader.requestId,
+                sendDate: moment().toISOString(),
+                isCallback: false
+            },
+            code: '0002',
+            message: 'Transaction not found'
+        }
+        res.status(404).send(response)
+    }
+}
