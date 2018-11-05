@@ -152,6 +152,39 @@ export function getTransactionsDone(user: string, accountNumber: string, filter:
     }))
 }
 
+export function getTransactionsPending(user: string, accountNumber: string, filter: TransactionFilter):
+    TransactionInfo[] {
+    return _.map(getTransactions(user, accountNumber, filter, 'pending'), ({
+        baseInfo: {
+            itemId,
+            amount,
+            currency,
+            description,
+            transactionType,
+            tradeDate,
+            mcc,
+            auxData,
+            transactionCategory,
+            initiator,
+            sender,
+            recipient
+        }
+    }) => ({
+        itemId,
+        amount,
+        currency,
+        description,
+        transactionType,
+        tradeDate,
+        mcc,
+        auxData,
+        transactionCategory,
+        initiator,
+        sender,
+        recipient
+    }))
+}
+
 export function setupTransactions(newTransactionData: TransactionData) {
     transactionData = newTransactionData
 }

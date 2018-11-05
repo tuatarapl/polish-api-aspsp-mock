@@ -335,5 +335,24 @@ describe('service', function() {
             })
             sharedTests(service.getTransactionsDone)
         })
+        describe('getTransactionsPending', function() {
+            it('should get transactions', function() {
+                expect(service.getTransactionsPending(user, accountNumber, {})).to.be.deep.equals([{
+                    itemId: itemIdPending,
+                    amount,
+                    currency,
+                    description,
+                    transactionType,
+                    tradeDate,
+                    mcc,
+                    auxData,
+                    transactionCategory,
+                    initiator,
+                    sender,
+                    recipient
+                }])
+            })
+            sharedTests(service.getTransactionsDone)
+        })
     })
 })
