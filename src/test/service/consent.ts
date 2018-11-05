@@ -11,7 +11,9 @@ describe('service', function() {
         const tppId = 'tppId'
         const redirectUri = 'redirectUri'
         const state = 'state'
-        const consent: service.Consent = {psuId, scope, scope_details: scopeDetails, tppId, redirectUri, state}
+        const consent: service.Consent = {
+            psuId, scope, scope_details: scopeDetails, tppId, redirectUri, state, status: 'active'
+        }
         describe('post', function() {
             it('should return id', function() {
                 expect(service.post(consent)).to.be.not.empty
@@ -60,6 +62,25 @@ describe('service', function() {
                 service.put(id, {...consent, scope: newScope})
                 expect(service.findByByTppIdAndConsentId(tppId, consentId))
                     .to.be.deep.equals({...consent, scope: newScope})
+            })
+        })
+        describe('deleteConsent', function() {
+            it('should delete', function() {
+                service.post(consent)
+                expect(service.deleteConsent(tppId, consentId)).to.be.true
+            })
+            it('should mark consent as deleted', function() {
+                service.post(consent)
+                service.deleteConsent(tppId, consentId)
+                expect(consent).to.have.property('status', 'deleted')
+            })
+            it('should return false for unknown tppId', function() {
+                service.post(consent)
+                expect(service.deleteConsent('unknown', consentId)).to.be.false
+            })
+            it('should return false for unknown consentId', function() {
+                service.post(consent)
+                expect(service.deleteConsent(tppId, 'unknown')).to.be.false
             })
         })
     })
