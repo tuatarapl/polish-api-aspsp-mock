@@ -375,5 +375,25 @@ describe('service', function() {
             })
             sharedTests(service.getTransactionsRejected)
         })
+        describe('getTransactionsCancelled', function() {
+            it('should get transactions', function() {
+                expect(service.getTransactionsCancelled(user, accountNumber, {})).to.be.deep.equals([{
+                    itemId: itemIdCancelled,
+                    amount,
+                    currency,
+                    description,
+                    transactionType,
+                    tradeDate,
+                    mcc,
+                    auxData,
+                    transactionCategory,
+                    transactionStatus,
+                    initiator,
+                    sender,
+                    recipient
+                }])
+            })
+            sharedTests(service.getTransactionsCancelled)
+        })
     })
 })

@@ -1,6 +1,7 @@
 import * as _ from 'lodash'
 import { TransactionFilter } from '../controllers/model'
-import { TransactionDetail, TransactionDetailExt, TransactionInfo, TransactionKind } from './model'
+import { TransactionCancelledInfo, TransactionDetail, TransactionDetailExt,
+    TransactionInfo, TransactionKind, TransactionPendingInfo, TransactionRejectedInfo } from './model'
 interface TransactionData {
     [user: string]: {
         [accountNumber: string]: {
@@ -153,7 +154,7 @@ export function getTransactionsDone(user: string, accountNumber: string, filter:
 }
 
 export function getTransactionsPending(user: string, accountNumber: string, filter: TransactionFilter):
-    TransactionInfo[] {
+    TransactionPendingInfo[] {
     return _.map(getTransactions(user, accountNumber, filter, 'pending'), ({
         baseInfo: {
             itemId,
@@ -185,7 +186,7 @@ export function getTransactionsPending(user: string, accountNumber: string, filt
     }))
 }
 export function getTransactionsRejected(user: string, accountNumber: string, filter: TransactionFilter):
-    TransactionInfo[] {
+    TransactionRejectedInfo[] {
     return _.map(getTransactions(user, accountNumber, filter, 'rejected'), ({
         baseInfo: {
             itemId,
@@ -218,6 +219,41 @@ export function getTransactionsRejected(user: string, accountNumber: string, fil
         recipient,
         rejectionReason,
         rejectionDate
+    }))
+}
+
+export function getTransactionsCancelled(user: string, accountNumber: string, filter: TransactionFilter):
+    TransactionCancelledInfo[] {
+    return _.map(getTransactions(user, accountNumber, filter, 'cancelled'), ({
+        baseInfo: {
+            itemId,
+            amount,
+            currency,
+            description,
+            transactionType,
+            tradeDate,
+            mcc,
+            auxData,
+            transactionCategory,
+            transactionStatus,
+            initiator,
+            sender,
+            recipient
+        }
+    }) => ({
+        itemId,
+        amount,
+        currency,
+        description,
+        transactionType,
+        tradeDate,
+        mcc,
+        auxData,
+        transactionCategory,
+        transactionStatus,
+        initiator,
+        sender,
+        recipient
     }))
 }
 
