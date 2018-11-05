@@ -1,3 +1,6 @@
+import { TokenData } from "../service/token";
+import { Consent } from "../service/consent";
+
 export interface PageConfig {
     pageId?: string
     perPage?: number
@@ -16,4 +19,13 @@ export interface TransactionFilter {
     minAmount?: string
     maxAmount?: string
     type?: 'CREDIT' | 'DEBIT'
+}
+
+declare module 'swagger-tools' {
+    interface Swagger20Request<P extends SwaggerRequestParameters> {
+        token: string
+        tokenData: TokenData
+        consentId: string
+        consent: Consent
+    }
 }

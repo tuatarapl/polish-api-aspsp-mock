@@ -9,14 +9,6 @@ import { TokenData } from '../service/token'
 import * as transactionsService from '../service/transactions'
 import {PageConfig, PageInfo, TransactionFilter} from './model'
 const trace = debug('aspsp-mock:controllers:ais')
-declare module 'swagger-tools' {
-    interface Swagger20Request<P extends SwaggerRequestParameters> {
-        token: string
-        tokenData: TokenData
-        consentId: string
-        consent: Consent
-    }
-}
 
 function  paginate<T>(items: T[], pageConfig?: PageConfig): {items: T[], pageInfo: PageInfo} {
     pageConfig = _.assign({pageId: '0', perPage: 10}, pageConfig)
