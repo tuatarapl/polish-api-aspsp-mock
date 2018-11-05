@@ -204,3 +204,13 @@ export interface TransactionDetail {
     rejectionReason?: string
     holdExpirationDate?: string
 }
+
+export interface TransactionDetailExt extends TransactionDetail {
+    baseInfo: TransactionInfo 
+        & TransactionPendingInfo 
+        & TransactionRejectedInfo 
+        & TransactionCancelledInfo 
+        & TransactionScheduledInfo
+        & HoldInfo
+    kind: 'done' | 'pending' | 'rejected' | 'cancelled' | 'scheduled' | 'hold'
+}
