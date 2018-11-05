@@ -9,7 +9,8 @@ export interface Consent {
     scope_details: {
         consentId: string
     } & any,
-    state: string
+    state: string,
+    status: 'active' | 'deleted'
 }
 
 const consentById: {[id: string]: Consent} = {
@@ -42,4 +43,14 @@ export function put(id: string, consent: Consent) {
     consentById[id] = consent
     consentByTppIdAndConsentId[consent.tppId] = consentByTppIdAndConsentId[consent.tppId] || {}
     consentByTppIdAndConsentId[consent.tppId][consent.scope_details.consentId] = consent
+}
+
+export function deleteConsent(tppId: string, consentId: string): boolean {
+    const consent = findByByTppIdAndConsentId(tppId, consentId)
+    if (consent) {
+        consent.status = 'deleted'
+        return true
+    } else {
+        return false
+    }
 }

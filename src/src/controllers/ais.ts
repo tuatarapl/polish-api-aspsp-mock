@@ -4,7 +4,7 @@ import * as _ from 'lodash'
 import * as moment from 'moment'
 import { Swagger20Request, SwaggerRequestParameters } from 'swagger-tools'
 import * as accountsService from '../service/accounts'
-import {Consent} from '../service/consent'
+import {Consent, deleteConsent as deleteConsentService} from '../service/consent'
 import { TokenData } from '../service/token'
 import * as transactionsService from '../service/transactions'
 import {PageConfig, PageInfo, TransactionFilter} from './model'
@@ -148,5 +148,18 @@ export function getTransactionDetail(req: Swagger20Request<any>, res: Response) 
             message: 'Transaction not found'
         }
         res.status(404).send(response)
+    }
+}
+
+export function deleteConsent(req: Swagger20Request<any>, res: Response) {
+    const deleteConsentRequest = req.swagger.params.deleteConsentRequest.value
+    trace(`deleteConsentRequest ${JSON.stringify(deleteConsentRequest)}`)
+    trace(`tokenData ${JSON.stringify(req.tokenData)}`)
+    const success = deleteConsentService(req.tokenData.sub, deleteConsentRequest.consentId)
+    trace(`success ${JSON.stringify(success)}`)
+    if (success) {
+        res.status(204).send()
+    } else {
+        res.status(404).send()
     }
 }
