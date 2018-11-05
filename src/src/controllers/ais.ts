@@ -37,8 +37,7 @@ export function getAccounts(req: Swagger20Request<any>, res: Response) {
     const getAccountsRequest = req.swagger.params.getAccountsRequest.value
     trace(`getAccountsRequest ${JSON.stringify(getAccountsRequest)}`)
     trace(`tokenData ${JSON.stringify(req.tokenData)}`)
-    const {items: accounts, pageInfo} = paginate(_.map(accountsService.getAccounts(req.tokenData.sub),
-    ({accountNumber, accountTypeName, accountType}) => ({accountNumber, accountTypeName, accountType}))
+    const {items: accounts, pageInfo} = paginate(accountsService.getAccounts(req.tokenData.sub)
     , getAccountsRequest)
     trace(`accounts ${JSON.stringify(accounts)}`)
     const response = {
@@ -57,32 +56,7 @@ export function getAccount(req: Swagger20Request<any>, res: Response) {
     const getAccountRequest = req.swagger.params.getAccountRequest.value
     trace(`getAccountRequest ${JSON.stringify(getAccountRequest)}`)
     trace(`tokenData ${JSON.stringify(req.tokenData)}`)
-    const account = _.map([accountsService.getAccount(req.tokenData.sub, getAccountRequest.accountNumber)],
-        ({
-            accountNumber,
-            nameAddress,
-            accountType,
-            accountTypeName,
-            accountHolderType,
-            accountNameClient,
-            currency,
-            availableBalance,
-            bookingBalance,
-            bank,
-            auxData
-        }) => ({
-            accountNumber,
-            nameAddress,
-            accountType,
-            accountTypeName,
-            accountHolderType,
-            accountNameClient,
-            currency,
-            availableBalance,
-            bookingBalance,
-            bank,
-            auxData
-        }))[0]
+    const account = accountsService.getAccount(req.tokenData.sub, getAccountRequest.accountNumber)
     trace(`account ${JSON.stringify(account)}`)
     if (account) {
         const response = {
