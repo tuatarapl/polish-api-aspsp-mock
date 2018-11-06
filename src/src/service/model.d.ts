@@ -31,12 +31,13 @@ export interface Bank {
     address?: Address
 }
 
+export type AccountHolderType = 'individual' | 'corporation'
 export interface AccountInfo {
     accountNumber: string
     nameAddress: NameAddress
     accountType: DictionaryItem
     accountTypeName?: string
-    accountHolderType: 'individual' | 'corporation'
+    accountHolderType: AccountHolderType
     accountNameClient?: string
     currency: string
     availableBalance: string

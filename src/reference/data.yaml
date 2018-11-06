@@ -1,0 +1,50 @@
+cities: 
+  - Warszawa
+  - Kraków
+  - Gdańsk
+  - Poznań
+  - Wrocław
+  - Łódź
+  - Katowice
+  - Kielce
+  - Szczecin
+countries: 
+  - Polska
+locations: 
+  - Puławska
+  - Grzybowska
+locationPrefixes: 
+  - ul.
+currencies: 
+  - PLN
+  - USD
+  - GBP
+  - EUR
+  - CHF
+  - JPY
+accountTypes: 
+  - code: '0001'
+    description: Current Accocunt
+  - code: '0002'
+    description: Saving Accocunt  
+  - code: '0003'
+    description: Bonus Saving Accocunt    
+  - code: '0004'
+    description: VIP Current Accocunt    
+accountNamesClient: 
+  - Moje konto
+namesIndividual: 
+  - Jan Kowalski
+  - Jan Nowak
+namesCorporation: 
+  - Initech Z.O.O.
+  - Technodyne S.A.
+ownBanks: 
+  - bicOrSwift: 32167
+    name: Bank Pierwszy
+    code: IDDQD
+    countryCode: PL
+    address: 
+      - ul. Długa 39
+      - 07-007 Warszawa
+      - Polska
