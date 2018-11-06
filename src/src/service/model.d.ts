@@ -53,6 +53,7 @@ export interface SenderRecipient {
     nameAddress?: NameAddress
 }
 
+export type TransactionCategory = 'CREDIT' | 'DEBIT'
 export interface TransactionInfo {
     itemId: string
     amount: string
@@ -62,7 +63,7 @@ export interface TransactionInfo {
     tradeDate?: string
     mcc?: string
     auxData?: Map
-    transactionCategory: 'CREDIT' | 'DEBIT'
+    transactionCategory: TransactionCategory
     transactionStatus?: DictionaryItem
     initiator?: NameAddress
     sender?: SenderRecipient
@@ -80,7 +81,7 @@ export interface TransactionPendingInfo {
     tradeDate?: string
     mcc?: string
     auxData?: Map
-    transactionCategory: 'CREDIT' | 'DEBIT'
+    transactionCategory: TransactionCategory
     initiator?: NameAddress
     sender?: SenderRecipient
     recipient?: SenderRecipient
@@ -95,7 +96,7 @@ export interface TransactionRejectedInfo {
     tradeDate?: string
     mcc?: string
     auxData?: Map
-    transactionCategory: 'CREDIT' | 'DEBIT'
+    transactionCategory: TransactionCategory
     initiator?: NameAddress
     sender?: SenderRecipient
     recipient?: SenderRecipient
@@ -112,7 +113,7 @@ export interface TransactionCancelledInfo {
     tradeDate?: string
     mcc?: string
     auxData?: Map
-    transactionCategory: 'CREDIT' | 'DEBIT'
+    transactionCategory: TransactionCategory
     transactionStatus?: DictionaryItem
     initiator?: NameAddress
     sender?: SenderRecipient
@@ -150,10 +151,11 @@ export interface HoldInfo {
     recipient?: SenderRecipient
 }
 
+export type AdditionalPayorIdType = 'P' | 'R' | '1' | '2'
 export interface SocialSecurityPayor {
     nip?: string
     additionalPayorId?: string
-    additionalPayorIdType?: 'P' | 'R' | '1' | '2'
+    additionalPayorIdType?: AdditionalPayorIdType
 }
 
 export interface TransactionInfoZUS {
@@ -165,9 +167,10 @@ export interface TransactionInfoZUS {
     obligationId?: string
 }
 
+export type PayorIdType = 'N' | 'P' | 'R' | '1' | '2' | '3'
 export interface Payor {
     payorId: string
-    payorIdType: 'N' | 'P' | 'R' | '1' | '2' | '3'
+    payorIdType: PayorIdType
 }
 
 export interface TransactionInfoTax {

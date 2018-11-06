@@ -40,7 +40,7 @@ namesCorporation:
   - Initech Z.O.O.
   - Technodyne S.A.
 ownBanks: 
-  - bicOrSwift: 32167
+  - bicOrSwift: '32167'
     name: Bank Pierwszy
     code: IDDQD
     countryCode: PL
@@ -48,3 +48,44 @@ ownBanks:
       - ul. Długa 39
       - 07-007 Warszawa
       - Polska
+otherBanks:
+  - bicOrSwift: '12345'
+    name: Bank Drugi
+    code: IDKFA
+    countryCode: PL
+    address: 
+      - ul. Szeroka 77A
+      - 23-968 Kraków
+      - Polska
+descriptions: 
+  - Faktura nr 11/22111
+  - Zwrot z obiad
+  - '23121322132392923823317'
+transactionTypes: 
+  - Elixir
+  - Sorbnet
+transactionStatuses: 
+  - code: P
+    description: Pending
+  - code: D
+    description: Done
+  - code: R
+    description: Rejected
+  - code: S
+    description: Scheduled
+  - code: C
+    description: Cancelled                
+tppNames: 
+  - Inny Bank
+rejectionReasons: 
+  - Brak środków na koncie
+formCodes: 
+  - PIT-5
+  - VAT-7
+  - VAT-7K
+contributionIds: 
+  - '01'
+contributionTypes: 
+  - S 
+paymentTypeIds: []
+
