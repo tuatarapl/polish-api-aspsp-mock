@@ -39,9 +39,7 @@ app.get('/confirmConsent', (req, res) => {
                 redirectUri.searchParams.append('state', consent.state)
                 res.redirect(redirectUri.toString())
             } else {
-                const redirectUri = new URL(consent.redirectUri)
-                redirectUri.searchParams.append('error', 'Not yet implemented')
-                res.redirect(redirectUri.toString())
+                res.header('www-authenticate', 'Basic realm="aspsp"').status(401).send()
             }
         } else {
             res.status(500).send()
