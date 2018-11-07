@@ -18,5 +18,5 @@ _.forEach(users, (user) => {
         account.transactions = generator.generateTransactions(_.random(10, 100), account)
     })
 })
-fs.writeFileSync('data/generated.yaml',
+fs.writeFileSync('data/data.yaml',
     _.map(users, (user) => yaml.safeDump(user, {skipInvalid: true, noRefs: true})).join('---\n'), 'UTF-8')
