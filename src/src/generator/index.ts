@@ -322,6 +322,8 @@ export class Generator {
     }
     public generateRejectedTransaction(account: AccountBaseInfo & AccountInfo): TransactionDetailExt {
         const baseTransaction = this.generateTransactionBase(account, 'rejected')
+        baseTransaction.baseInfo.rejectionReason = baseTransaction.rejectionReason
+        baseTransaction.baseInfo.rejectionDate = this.generateDate()
         return baseTransaction
     }
     public generateScheduledTransaction(account: AccountBaseInfo & AccountInfo): TransactionDetailExt {
@@ -335,6 +337,7 @@ export class Generator {
 
     public generateHold(account: AccountBaseInfo & AccountInfo): TransactionDetailExt {
         const baseTransaction = this.generateTransactionBase(account, 'hold')
+        baseTransaction.baseInfo.holdExpirationDate = baseTransaction.holdExpirationDate
         return baseTransaction
     }
 
