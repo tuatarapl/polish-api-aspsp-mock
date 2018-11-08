@@ -3,6 +3,8 @@ import * as moment from 'moment'
 import { Swagger20Request } from 'swagger-tools'
 import {Consent, get, post} from '../service/consent'
 import {lookupAccessCode, lookupToken} from '../service/token'
+const deployBaseUrl = process.env.DEPLOY_BASE_URL || 'http://localhost:3000'
+
 export function authorize(req: Swagger20Request<any>, res: Response) {
     const authorizeRequest = req.swagger.params.authorizeRequest.value
     const consent: Consent = {
@@ -15,7 +17,7 @@ export function authorize(req: Swagger20Request<any>, res: Response) {
     }
 
     const consentId = post(consent)
-    const url = new URL('/confirmConsent', 'http://localhost:3000')
+    const url = new URL('/confirmConsent', deployBaseUrl)
     url.searchParams.append('consentId', consentId)
     const response = {
         responseHeader: {
