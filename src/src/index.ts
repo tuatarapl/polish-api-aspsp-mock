@@ -6,13 +6,17 @@ import { NextFunction, Request, Response} from 'express'
 import * as fs from 'fs'
 import * as yaml from 'js-yaml'
 import * as path from 'path'
+import { cwd } from 'process'
 import * as swagger from 'swagger-tools'
 import './loader'
+import { security } from './security'
 import {Consent, get as getConsent, put as putConsent} from './service/consent'
 import {generateAccessCode, generateToken, lookupToken, TokenData} from './service/token'
 const trace = debug('aspsp-mock')
 const port = process.env.LISTEN_PORT || 3000
 const app = express()
+
+app.use(security)
 
 app.get('/confirmConsent', (req, res) => {
     trace('/confirmConsent')
@@ -39,7 +43,7 @@ app.get('/confirmConsent', (req, res) => {
                 redirectUri.searchParams.append('state', consent.state)
                 res.redirect(redirectUri.toString())
             } else {
-                res.header('www-authenticate', 'Basic realm="aspsp"').status(401).send()
+                res.redirect(`/confirmation/${id}`)
             }
         } else {
             res.status(500).send()
@@ -91,11 +95,18 @@ swagger.initializeMiddleware(polishAPISpecification, (middleware) => {
   app.use(middleware.swaggerRouter({useStubs: true, controllers: path.join(__dirname, 'controllers')}))
   app.use(middleware.swaggerUi())
 })
-
+app.get('/consent/:consentId', (req, res) => {
+    const consent = getConsent(req.params.consentId)
+    if (consent) {
+        res.send(consent)
+    } else {
+        res.status(404).send()
+    }
+})
 app.use(express.static('web/dist'))
 app.use(express.static('static'))
 app.get('*', (req, res) => {
-    res.sendFile(`static/index.html`)
+    res.sendFile(`${cwd()}/static/index.html`)
 })
 
 app.listen(port, () => trace(`Statement service mock listening on port ${port}!`))
