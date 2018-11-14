@@ -13,7 +13,7 @@ const port = process.env.LISTEN_PORT || 3000
 const app = express()
 
 app.use(security)
-app.use(consent)
+app.use('/api', consent)
 app.use(polishApi)
 app.use(web)
 

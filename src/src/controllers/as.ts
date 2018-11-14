@@ -17,7 +17,7 @@ export function authorize(req: Swagger20Request<any>, res: Response) {
     }
 
     const consentId = post(consent)
-    const url = new URL('/confirmConsent', deployBaseUrl)
+    const url = new URL('/api/confirmConsent', deployBaseUrl)
     url.searchParams.append('consentId', consentId)
     const response = {
         responseHeader: {

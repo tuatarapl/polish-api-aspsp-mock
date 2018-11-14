@@ -3,11 +3,11 @@ import Vue from 'vue'
 import { RouteConfig } from 'vue-router'
 
 function getConsent(consentId) {
-    return axios.get(`/consent/${consentId}`).then((response) => response.data)
+    return axios.get(`/api/consent/${consentId}`).then((response) => response.data)
 }
 
 function confirmConsent(consentId, consent) {
-    return axios.post(`/confirmConsent?consentId=${consentId}`, consent,{
+    return axios.post(`/api/confirmConsent?consentId=${consentId}`, consent,{
         headers: {
             accept: 'application/vnd.tuatara.redirect+json'
         }
