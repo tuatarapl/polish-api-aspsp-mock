@@ -329,3 +329,11 @@ export function getHolds(user: string, accountNumber: string, filter: Transactio
 export function setupTransactions(newTransactionData: TransactionData) {
     transactionData = newTransactionData
 }
+
+export function list(user: string, accountNumber: string): TransactionDetailExt[] {
+    return _((transactionData[user] || {})[accountNumber] || {}).values().value()
+}
+
+export function get(user: string, accountNumber: string, itemId: string): TransactionDetailExt {
+    return ((transactionData[user] || {})[accountNumber] || {})[itemId]
+}
