@@ -1,13 +1,13 @@
 /* istanbul ignore file */
 import * as debug from 'debug'
 import * as express from 'express'
-import { cwd } from 'process'
 import consent from './consent'
 import './loader'
 import polishApi from './polish-api'
 import { security } from './security'
 import {Consent} from './service/consent'
 import { TokenData} from './service/token'
+import web from './web'
 const trace = debug('aspsp-mock')
 const port = process.env.LISTEN_PORT || 3000
 const app = express()
@@ -25,11 +25,6 @@ declare global {
     }
 }
 app.use(polishApi)
-
-app.use(express.static('web/dist'))
-app.use(express.static('static'))
-app.get('*', (req, res) => {
-    res.sendFile(`${cwd()}/static/index.html`)
-})
+app.use(web)
 
 app.listen(port, () => trace(`Statement service mock listening on port ${port}!`))
