@@ -41,10 +41,10 @@ router.get('/confirmConsent', (req, res) => {
                 trace(`token ${token}`)
                 const accessCode = generateAccessCode(token)
                 trace(`accessCode ${accessCode}`)
-                const redirectUri = new URL(consent.redirectUri)
-                redirectUri.searchParams.append('code', accessCode)
-                redirectUri.searchParams.append('state', consent.state)
-                res.redirect(redirectUri.toString())
+                redirect(req, res, consent.redirectUri, {
+                    code: accessCode,
+                    state : consent.state
+                })
             } else {
                 res.redirect(`/confirmation/${id}`)
             }
