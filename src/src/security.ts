@@ -7,6 +7,7 @@ import * as FileStore from 'session-file-store'
 import { logIn } from './service/user'
 export const security = Router()
 security.use(session({
+    name: 'aspsp-session',
     secret: 'keyboard cat',
     store: new (FileStore(session))({
         secret: 'keyboard cat'
