@@ -5,6 +5,17 @@ import { NextFunction, Request, Response} from 'express'
 import {Consent, get as getConsent, put as putConsent} from './service/consent'
 import {generateAccessCode, generateToken, lookupToken, TokenData} from './service/token'
 
+declare global {
+    namespace Express {
+        interface Request {
+            token: string
+            tokenData: TokenData
+            consentId: string
+            consent: Consent
+        }
+    }
+}
+
 const trace = debug('aspsp-mock:consent')
 const router = Router()
 export default router

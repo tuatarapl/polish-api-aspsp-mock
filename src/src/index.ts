@@ -14,16 +14,6 @@ const app = express()
 
 app.use(security)
 app.use(consent)
-declare global {
-    namespace Express {
-        interface Request {
-            token: string
-            tokenData: TokenData
-            consentId: string
-            consent: Consent
-        }
-    }
-}
 app.use(polishApi)
 app.use(web)
 
