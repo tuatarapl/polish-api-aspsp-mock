@@ -1,14 +1,23 @@
 import axios from 'axios'
+import Vue from 'vue'
 import { RouteConfig } from 'vue-router'
 
 function getConsent(consentId) {
     return axios.get(`/consent/${consentId}`).then((response) => response.data)
 }
 
+function confirmConsent(consentId, consent) {
+    return axios.post(`/confirmConsent?consentId=${consentId}`, consent,{
+        headers: {
+            accept: 'application/vnd.tuatara.redirect+json'
+        }
+    }).then((response) => response.data)
+}
+
 export const confirmation: RouteConfig[] = [{
     name: 'confirmation',
     path: '/confirmation/:consentId',
-    component: {
+    component: Vue.extend({
       template: `
         <div class="container mt-3">
           <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
@@ -22,7 +31,8 @@ export const confirmation: RouteConfig[] = [{
                   </ul>
               </div>
           </nav>
-          {{consent}}
+          <consent-edit :consent="consent"></consent-edit>
+          <button type="button" class="btn btn-primary" @click="doConfirm()">Confirm</button>
         </div>`,
         beforeRouteEnter(to, from, next) {
             getConsent(to.params.consentId).then((data) => {
@@ -41,6 +51,13 @@ export const confirmation: RouteConfig[] = [{
             return {
                 consent: null
             }
+        },
+        methods: {
+            doConfirm() {
+                confirmConsent(this.$route.params.consentId, this.consent).then((redirect) => {
+                    window.location = redirect.redirectUrl
+                })
+            }
         }
-    }
+    })
 }]
