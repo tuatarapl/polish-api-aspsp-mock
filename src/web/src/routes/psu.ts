@@ -43,9 +43,9 @@ export const psu: RouteConfig[] = [{
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Consent ID</th>
+                    <th>Consent Id</th>
                     <th>Scope</th>
-                    <th>Tpp Id</th>
+                    <th>TPP Id</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -87,6 +87,22 @@ export const psu: RouteConfig[] = [{
               template: `
 <div class="row">
     <div class="col-12">
+        <div class="form-group">
+            <label for="consentId">Internal Consent Id</label>
+            <input type="text" class="form-control" id="consentId" v-model="consent.id" readonly/>
+        </div>
+        <div class="form-group">
+            <label for="consentId">TPP Id</label>
+            <input type="text" class="form-control" id="consentId" v-model="consent.tppId" readonly/>
+        </div>
+        <div class="form-group">
+            <label for="consentId">Status</label>
+            <input type="text" class="form-control" id="consentId" v-model="consent.status" readonly/>
+        </div>
+        <div class="form-group">
+            <label for="consentId">Scope</label>
+            <input type="text" class="form-control" id="consentId" v-model="consent.scope" readonly/>
+        </div>
         <consent-edit :consent="consent" :readonly="true"></consent-edit>
         <router-link :to="{name:'consents'}">Back</router-link>
     <div>
