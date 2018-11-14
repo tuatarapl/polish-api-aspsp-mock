@@ -395,11 +395,16 @@ export interface PaymentBundleContainer {
     bundle: PaymentBundle
     bundleId?: string
     bundleStatus?: BundleStatus
-    payments: PaymentContainer[]
+    payments: AddPayment[]
 }
 
 export interface AddPayment {
     paymentId: string
     generalStatus: GeneralStatus
     detailedStatus: string
+}
+
+export interface AddBundle {
+    bundleId?:string
+    bundleStatus: BundleStatus
 }

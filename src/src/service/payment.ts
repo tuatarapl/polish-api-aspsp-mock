@@ -1,10 +1,10 @@
 
 import * as _ from 'lodash'
 import * as uuid4 from 'uuid/v4'
-import { ExecutionMode, GeneralStatus, PaymentBundleContainer,
-    PaymentContainerDomestic, PaymentContainerEEA, PaymentContainerNonEEA,
-    PaymentContainerTax, PaymentDomestic, PaymentEEA, PaymentNonEEA,
-    PaymentTax, RecurringTransferParameters, AddPayment} from './model'
+import { AddPayment, BundleStatus, ExecutionMode,
+    GeneralStatus, PaymentBundle, PaymentBundleContainer,
+    PaymentContainerDomestic, PaymentContainerEEA, PaymentContainerNonEEA, PaymentContainerTax,
+    PaymentDomestic, PaymentEEA, PaymentNonEEA, PaymentTax, RecurringTransferParameters, AddBundle} from './model'
 interface Payments {
     [user: string]: {
         [paymentId: string]: PaymentContainerDomestic | PaymentContainerEEA
@@ -37,6 +37,11 @@ function generateGeneralStatus(): GeneralStatus {
 
 function generateDetailedStatus(generalStatus: GeneralStatus): string {
     return detailedStatuses[generalStatus][_.random(detailedStatuses[generalStatus].length - 1)]
+}
+const bundleStatuses: BundleStatus[] = ['cancelled', 'done', 'inProgress', 'partiallyDone']
+
+function generateBundleStatus(): BundleStatus {
+    return bundleStatuses[_.random(bundleStatuses.length - 1)]
 }
 
 function generateExecutionMode(payment: {
@@ -119,4 +124,22 @@ export function tax(user: string, payment: PaymentTax): AddPayment {
         executionMode: generateExecutionMode(payment)
     }
     return {paymentId, generalStatus, detailedStatus}
+}
+
+export function transferBundle(user: string, bundle: PaymentBundle): AddBundle {
+    const bundleId = uuid4()
+    const bundleStatus = generateBundleStatus()
+    bundles[user] = bundles[user] || {}
+    bundles[user][bundleId] = {
+        bundleId,
+        bundle,
+        bundleStatus,
+        payments: _.flatten([
+            _(bundle.domesticTransfers).map(_.partial(domestic, user)).value(),
+            _(bundle.EEATransfers).map(_.partial(EEA, user)).value(),
+            _(bundle.nonEEATransfers).map(_.partial(nonEEA, user)).value(),
+            _(bundle.taxTransfers).map(_.partial(tax, user)).value()
+        ])
+    }
+    return {bundleId, bundleStatus}
 }
