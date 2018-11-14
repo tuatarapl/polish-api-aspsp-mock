@@ -121,25 +121,6 @@ router.post('/confirmConsent', json(), (req, res) => {
     }
 })
 
-router.use((req: Request, res, next) => {
-    if (req.headers.authorization) {
-        const parts = req.headers.authorization.split(' ')
-        if (parts.length === 2 && parts[0] === 'Bearer') {
-            const token = parts[1]
-            const tokenData = lookupToken(token)
-            req.token = token
-            req.tokenData = tokenData
-            if (tokenData.consentId) {
-                const consentId = tokenData.consentId
-                const consent = getConsent(consentId)
-                req.consentId = consentId
-                req.consent = consent
-            }
-        }
-    }
-    next()
-})
-
 router.get('/consent/:consentId', (req, res) => {
     const consent = getConsent(req.params.consentId)
     if (consent) {
