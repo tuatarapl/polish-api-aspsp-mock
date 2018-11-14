@@ -3,7 +3,7 @@ import * as debug from 'debug'
 import {json, Router} from 'express'
 import { NextFunction, Request, Response} from 'express'
 import * as _ from 'lodash'
-import {Consent, get as getConsent, put as putConsent, listAll, listByPsuId} from './service/consent'
+import {Consent, get as getConsent, listAll, listByPsuId, put as putConsent} from './service/consent'
 import {generateAccessCode, generateToken, lookupToken, TokenData} from './service/token'
 
 declare global {
