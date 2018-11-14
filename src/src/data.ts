@@ -1,11 +1,12 @@
 import * as debug from 'debug'
 import {Router} from 'express'
+import * as accountsService from './service/accounts'
 import * as userService from './service/user'
 const trace = debug('aspsp-mock:data')
 const router = Router()
 export default router
 
-router.get('/user/', (req, res) => {
+router.get('/users/', (req, res) => {
     const users = userService.list()
     if (users) {
         res.send(users)
@@ -14,7 +15,7 @@ router.get('/user/', (req, res) => {
     }
 })
 
-router.get('/user/:userId', (req, res) => {
+router.get('/users/:userId', (req, res) => {
     const user = userService.get(req.params.userId)
     if (user) {
         res.send(user)
@@ -23,3 +24,20 @@ router.get('/user/:userId', (req, res) => {
     }
 })
 
+router.get('/users/:userId/accounts', (req, res) => {
+    const accounts = accountsService.list(req.params.userId)
+    if (accounts) {
+        res.send(accounts)
+    } else {
+        res.status(404).send()
+    }
+})
+
+router.get('/users/:userId/accounts/:accountNumber', (req, res) => {
+    const account = accountsService.get(req.params.userId, req.params.accountNumber)
+    if (account) {
+        res.send(account)
+    } else {
+        res.status(404).send()
+    }
+})

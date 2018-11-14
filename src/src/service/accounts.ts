@@ -9,7 +9,7 @@ export interface Accounts {
 let accounts: Accounts = {}
 
 export function getAccounts(user: string): AccountBaseInfo[] {
-    return _(accounts[user]).values().flatten()
+    return _(accounts[user]).values()
         .map(({accountNumber, accountTypeName, accountType}) => ({accountNumber, accountTypeName, accountType})).value()
 }
 export function getAccount(user: string, accountNumber: string): AccountInfo {
@@ -46,4 +46,12 @@ export function getAccount(user: string, accountNumber: string): AccountInfo {
 
 export function setupAccounts(newAccounts: Accounts) {
     accounts = newAccounts
+}
+
+export function list(user: string): Array<AccountBaseInfo & AccountInfo> {
+    return _(accounts[user]).values().value()
+}
+
+export function get(user: string, accountNumber: string): AccountBaseInfo & AccountInfo {
+    return (accounts[user] || {})[accountNumber]
 }
