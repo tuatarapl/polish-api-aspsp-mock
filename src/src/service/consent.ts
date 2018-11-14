@@ -1,5 +1,5 @@
+import * as _ from 'lodash'
 import * as uuid4 from 'uuid/v4'
-
 export interface Consent {
     id?: string
     scope: string
@@ -36,6 +36,15 @@ export function get(id: string): Consent {
 
 export function findByByTppIdAndConsentId(tppId: string, consentId: string): Consent {
     return (consentByTppIdAndConsentId[tppId] || {} )[consentId]
+}
+
+export function listByPsuId(psuId: string): Consent[] {
+    return _(consentById).values().filter((consent) => consent.psuId === psuId).value()
+}
+
+export function listAll(): Consent[] {
+    return _(consentById).values().value()
+
 }
 
 export function put(id: string, consent: Consent) {

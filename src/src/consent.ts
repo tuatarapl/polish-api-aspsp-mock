@@ -3,7 +3,7 @@ import * as debug from 'debug'
 import {json, Router} from 'express'
 import { NextFunction, Request, Response} from 'express'
 import * as _ from 'lodash'
-import {Consent, get as getConsent, put as putConsent} from './service/consent'
+import {Consent, get as getConsent, put as putConsent, listAll, listByPsuId} from './service/consent'
 import {generateAccessCode, generateToken, lookupToken, TokenData} from './service/token'
 
 declare global {
@@ -144,6 +144,24 @@ router.get('/consent/:consentId', (req, res) => {
     const consent = getConsent(req.params.consentId)
     if (consent) {
         res.send(consent)
+    } else {
+        res.status(404).send()
+    }
+})
+
+router.get('/consent/', (req, res) => {
+    const consents = listAll()
+    if (consents) {
+        res.send(consents)
+    } else {
+        res.status(404).send()
+    }
+})
+
+router.get('/user/consent/', (req, res) => {
+    const consents = listByPsuId(req.user.username)
+    if (consents) {
+        res.send(consents)
     } else {
         res.status(404).send()
     }
