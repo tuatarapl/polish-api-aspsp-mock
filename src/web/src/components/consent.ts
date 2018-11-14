@@ -1,6 +1,6 @@
 import Vue from 'vue'
 Vue.component('consent-edit', {
-    props: ['consent', 'readonly'],
+    props: ['consent', 'readonly', 'accounts'],
     template: `
 <form class="form-group">
     <div class="form-group">
@@ -16,8 +16,14 @@ Vue.component('consent-edit', {
             <li class="list-group-item" v-for="(privilege,index) in consent.scope_details.privilegeList">
                 <div class="form-group">
                     <label :for="'accountNumber_'+index">Account Number</label>
+                    <select class="form-control" :id="'accountNumber_'+index" v-if="accounts"
+                        v-model="privilege.accountNumber" :disabled="readonly">
+                        <option v-for="account in accounts" :value="account.accountNumber">
+                            {{account.accountNumber}} {{account.accountTypeName}} {{account.accountNameClient}}
+                        </option>
+                    </select>
                     <input type="text" class="form-control" :id="'accountNumber_'+index"
-                        v-model="privilege.accountNumber" :readonly="readonly"/>
+                        v-model="privilege.accountNumber" :readonly="readonly" v-else/>
                 </div>
                 <privilege-section-wrapper v-if="consent.scope_details.scopeGroupType === 'ais-accounts'"
                     :privilege="privilege"

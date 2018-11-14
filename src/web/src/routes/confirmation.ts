@@ -2,6 +2,10 @@ import axios from 'axios'
 import Vue from 'vue'
 import { RouteConfig } from 'vue-router'
 
+function getAccounts() {
+    return axios.get(`/data/user/accounts`).then((response) => response.data)
+}
+
 function getConsent(consentId) {
     return axios.get(`/api/consent/${consentId}`).then((response) => response.data)
 }
@@ -31,25 +35,30 @@ export const confirmation: RouteConfig[] = [{
                   </ul>
               </div>
           </nav>
-          <consent-edit :consent="consent"></consent-edit>
+          <consent-edit :consent="consent" :accounts="accounts"></consent-edit>
           <button type="button" class="btn btn-primary" @click="doConfirm()">Confirm</button>
         </div>`,
         beforeRouteEnter(to, from, next) {
-            getConsent(to.params.consentId).then((data) => {
+            Promise.all([getConsent(to.params.consentId), getAccounts()])
+            .then(([consent, accounts]) => {
                 next((vm: any) => {
-                    vm.consent = data
+                    vm.consent = consent
+                    vm.accounts = accounts
                 })
             })
         },
         beforeRouteUpdate(to, from, next) {
-            getConsent(to.params.consentId).then((data) => {
-                this.consent = data
+            Promise.all([getConsent(to.params.consentId), getAccounts()])
+            .then(([consent, accounts]) => {
+                this.consent = consent
+                this.accounts = accounts
                 next()
             })
         },
         data() {
             return {
-                consent: null
+                consent: null,
+                accounts: null
             }
         },
         methods: {
