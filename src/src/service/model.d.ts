@@ -363,3 +363,43 @@ export type PaymentEEARequest = PaymentEEA & PaymentRequest
 export type PaymentNonEEARequest = PaymentNonEEA & PaymentRequest
 export type PaymentTaxRequest = PaymentTax & PaymentRequest
 export type PaymentBundleRequest = PaymentBundle & PaymentRequest
+
+export type GeneralStatus = 'submitted'| 'cancelled' | 'pending' | 'done' | 'rejected' | 'scheduled'
+export interface PaymentContainer {
+    kind: 'domestic' | 'EEA' | 'nonEEA' | 'tax'
+    paymentId: string
+    generalStatus: GeneralStatus
+    detailedStatus: string
+    executionMode: ExecutionMode
+}
+
+export interface PaymentContainerDomestic  extends PaymentContainer {
+    kind: 'domestic'
+    payment: PaymentDomestic
+}
+export interface PaymentContainerEEA  extends PaymentContainer {
+    kind: 'EEA'
+    payment: PaymentEEA
+}
+export interface PaymentContainerNonEEA  extends PaymentContainer {
+    kind: 'nonEEA'
+    payment: PaymentNonEEA
+}
+export interface PaymentContainerTax  extends PaymentContainer {
+    kind: 'tax'
+    payment: PaymentTax
+}
+
+export type BundleStatus = 'inProgress' | 'cancelled' | 'done' | 'partiallyDone' 
+export interface PaymentBundleContainer {
+    bundle: PaymentBundle
+    bundleId?: string
+    bundleStatus?: BundleStatus
+    payments: PaymentContainer[]
+}
+
+export interface AddPayment {
+    paymentId: string
+    generalStatus: GeneralStatus
+    detailedStatus: string
+}
