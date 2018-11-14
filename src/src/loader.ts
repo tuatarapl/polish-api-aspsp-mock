@@ -6,7 +6,12 @@ import { setupTransactions } from './service/transactions'
 import { setupUsers } from './service/user'
 const users = _.keyBy(yaml.safeLoadAll(fs.readFileSync('data/data.yaml', 'UTF-8')), 'username' )
 setupUsers(_(users).mapValues(({username, password}) => ({username, password})).value())
-const accountsData = _(users).mapValues(({accounts}) => _.keyBy(accounts, 'accountNumber')).value()
+const accountsData = _(users)
+    .mapValues(({accounts}) => _(accounts)
+        .mapValues(({ transactions, ...account}) => ({...account}))
+        .keyBy('accountNumber')
+        .value())
+    .value()
 setupAccounts(accountsData)
 const transactionsData = _(users).mapValues(({accounts}) =>
     _(accounts).keyBy('accountNumber').mapValues(({transactions}) => _.keyBy(transactions, 'baseInfo.itemId')).value())
