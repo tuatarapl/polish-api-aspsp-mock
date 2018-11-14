@@ -166,3 +166,12 @@ router.get('/user/consent/', (req, res) => {
         res.status(404).send()
     }
 })
+
+router.get('/user/consent/:consentId', (req, res) => {
+    const consent = getConsent(req.params.consentId)
+    if (consent && consent.psuId === req.user.username) {
+        res.send(consent)
+    } else {
+        res.status(404).send()
+    }
+})
