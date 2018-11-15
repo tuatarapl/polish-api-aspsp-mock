@@ -1,10 +1,11 @@
 
 import * as _ from 'lodash'
 import * as uuid4 from 'uuid/v4'
-import { AddPayment, BundleStatus, ExecutionMode,
-    GeneralStatus, PaymentBundle, PaymentBundleContainer,
-    PaymentContainerDomestic, PaymentContainerEEA, PaymentContainerNonEEA, PaymentContainerTax,
-    PaymentDomestic, PaymentEEA, PaymentNonEEA, PaymentTax, RecurringTransferParameters, AddBundle} from './model'
+import { AddBundle, AddPayment, BundleStatus,
+    ExecutionMode, GeneralStatus, GetBundle,
+    GetPayment, PaymentBundle, PaymentBundleContainer, PaymentContainerDomestic,
+    PaymentContainerEEA, PaymentContainerNonEEA, PaymentContainerTax, PaymentDomestic,
+    PaymentEEA, PaymentNonEEA, PaymentTax, RecurringTransferParameters} from './model'
 interface Payments {
     [user: string]: {
         [paymentId: string]: PaymentContainerDomestic | PaymentContainerEEA
@@ -142,4 +143,23 @@ export function transferBundle(user: string, bundle: PaymentBundle): AddBundle {
         ])
     }
     return {bundleId, bundleStatus}
+}
+
+export function getPayments(...paymentsToGet: Array<{user: string, paymentId: string}>): GetPayment[] {
+    return _(paymentsToGet)
+        .map(({user, paymentId}) => (payments[user] || {})[paymentId])
+        .map(({paymentId, generalStatus, detailedStatus, executionMode}) =>
+            ({paymentId, generalStatus, detailedStatus, executionMode}))
+        .value()
+}
+
+export function getBundle(user: string, bundleId: string, transactionsIncluded: boolean): GetBundle {
+    const {bundleStatus, payments: bundlePayments} = (bundles[user] || {})[bundleId]
+
+    return {
+        bundleId,
+        bundleStatus,
+        payments: transactionsIncluded ?
+            getPayments(..._.map(bundlePayments, (({paymentId}) => ({paymentId, user})))) : null
+    }
 }

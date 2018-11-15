@@ -404,7 +404,15 @@ export interface AddPayment {
     detailedStatus: string
 }
 
+export interface GetPayment extends AddPayment {
+    executionMode: ExecutionMode
+}
+
 export interface AddBundle {
     bundleId?:string
     bundleStatus: BundleStatus
+}
+
+export interface GetBundle extends AddBundle {
+    payments?: GetPayment[]
 }
