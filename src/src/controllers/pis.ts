@@ -25,7 +25,24 @@ function paymentHandler(requestParameter: string, service: (user: string, paymen
         res.send(response)
     }
 }
-export const domestic = paymentHandler('PaymentDomesticRequest', paymentService.domestic)
-export const EEA = paymentHandler('PaymentEEARequest', paymentService.EEA)
-export const nonEEA = paymentHandler('PaymentNonEEARequest', paymentService.nonEEA)
-export const tax = paymentHandler('PaymentTaxRequest', paymentService.tax)
+export const domestic = paymentHandler('domesticRequest', paymentService.domestic)
+export const EEA = paymentHandler('EEARequest', paymentService.EEA)
+export const nonEEA = paymentHandler('nonEEARequest', paymentService.nonEEA)
+export const tax = paymentHandler('taxRequest', paymentService.tax)
+
+export function bundle(req: Swagger20Request<any>, res: Response) {
+    const paymentRequest = req.swagger.params.bundleRequest.value
+    trace(`paymentRequest ${JSON.stringify(paymentRequest)}`)
+    trace(`tokenData ${JSON.stringify(req.tokenData)}`)
+    const addBundle = paymentService.transferBundle(req.tokenData.sub, paymentRequest)
+    trace(`addBundle ${JSON.stringify(addBundle)}`)
+    const response = {
+            responseHeader: {
+            requestId: paymentRequest.requestHeader.requestId,
+            sendDate: moment().toISOString(),
+            isCallback: false
+            },
+            ...addBundle
+        }
+    res.send(response)
+}
