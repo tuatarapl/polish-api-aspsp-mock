@@ -4,6 +4,7 @@ import * as moment from 'moment'
 import { Swagger20Request } from 'swagger-tools'
 import { AddPayment } from '../service/model'
 import * as paymentService from '../service/payment'
+import { lookupToken } from '../service/token'
 const trace = debug('aspsp-mock:controllers:ais')
 
 function paymentHandler(requestParameter: string, service: (user: string, payment: any) => AddPayment):
@@ -82,6 +83,36 @@ export function getBundle(req: Swagger20Request<any>, res: Response) {
             isCallback: false
             },
             ...getBundleResponse
+        }
+        res.send(response)
+    } else {
+        res.status(404).send()
+    }
+}
+export function getMultiplePayments(req: Swagger20Request<any>, res: Response) {
+    const payments = req.swagger.params.payments.value
+    trace(`payments ${JSON.stringify(payments)}`)
+    trace(`tokenData ${JSON.stringify(req.tokenData)}`)
+    const getPayments = paymentService.getPayments(..._.map(payments.payments, ({paymentId, accessToken}) => {
+        const token = lookupToken(accessToken)
+        if (token) {
+            return {
+                paymentId,
+                user: token.sub
+            }
+        } else {
+            throw new Error('Bad token')
+        }
+    }))
+    trace(`getPayments ${JSON.stringify(getPayments)}`)
+    if (getPayments) {
+        const response = {
+            responseHeader: {
+            requestId: payments.requestHeader.requestId,
+            sendDate: moment().toISOString(),
+            isCallback: false
+            },
+            payments: getPayments
         }
         res.send(response)
     } else {
