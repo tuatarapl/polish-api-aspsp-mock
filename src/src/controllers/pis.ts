@@ -119,3 +119,23 @@ export function getMultiplePayments(req: Swagger20Request<any>, res: Response) {
         res.status(404).send()
     }
 }
+
+export function cancelPayments(req: Swagger20Request<any>, res: Response) {
+    const paymentData = req.swagger.params['payment data'].value
+    trace(`paymentData ${JSON.stringify(paymentData)}`)
+    trace(`tokenData ${JSON.stringify(req.tokenData)}`)
+    if (paymentData.paymentId) {
+        paymentService.setPaymentStatus(req.tokenData.sub, paymentData.paymentId, 'cancelled')
+    } else if (paymentData.bundleId) {
+        paymentService.setBundleStatus(req.tokenData.sub, paymentData.paymentId, 'cancelled')
+    }
+    const response = {
+        responseHeader: {
+        requestId: paymentData.requestHeader.requestId,
+        sendDate: moment().toISOString(),
+        isCallback: false
+        }
+    }
+    res.send(response)
+
+}
