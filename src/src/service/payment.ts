@@ -163,3 +163,22 @@ export function getBundle(user: string, bundleId: string, transactionsIncluded: 
             getPayments(..._.map(bundlePayments, (({paymentId}) => ({paymentId, user})))) : null
     }
 }
+
+export function setPaymentStatus(user: string, paymentId: string, generalStatus: GeneralStatus) {
+    const payment =  (payments[user] || {})[paymentId]
+    if (payment) {
+        payment.generalStatus = generalStatus
+        payment.detailedStatus = generateDetailedStatus(generalStatus)
+    } else {
+        throw new Error('Unknown payment')
+    }
+}
+
+export function setBundleStatus(user: string, bundleId: string, bundleStatus: BundleStatus) {
+    const bundle =  (bundles[user] || {})[bundleId]
+    if (bundle) {
+        bundle.bundleStatus = bundleStatus
+    } else {
+        throw new Error('Unknown bundle')
+    }
+}
