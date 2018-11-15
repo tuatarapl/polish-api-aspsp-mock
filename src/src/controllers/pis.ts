@@ -67,3 +67,24 @@ export function getPayment(req: Swagger20Request<any>, res: Response) {
         res.status(404).send()
     }
 }
+export function getBundle(req: Swagger20Request<any>, res: Response) {
+    const bundleRequest = req.swagger.params.bundle.value
+    trace(`bundle ${JSON.stringify(bundleRequest)}`)
+    trace(`tokenData ${JSON.stringify(req.tokenData)}`)
+    const getBundleResponse = paymentService.getBundle(req.tokenData.sub,
+        bundleRequest.paymentId, bundleRequest.transactionsIncluded)
+    trace(`getBundle ${JSON.stringify(getBundleResponse)}`)
+    if (getBundleResponse) {
+        const response = {
+            responseHeader: {
+            requestId: bundleRequest.requestHeader.requestId,
+            sendDate: moment().toISOString(),
+            isCallback: false
+            },
+            ...getBundleResponse
+        }
+        res.send(response)
+    } else {
+        res.status(404).send()
+    }
+}
