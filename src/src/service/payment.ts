@@ -5,7 +5,7 @@ import { AddBundle, AddPayment, BundleStatus,
     ExecutionMode, GeneralStatus, GetBundle,
     GetPayment, PaymentBundle, PaymentBundleContainer, PaymentContainerDomestic,
     PaymentContainerEEA, PaymentContainerNonEEA, PaymentContainerTax, PaymentDomestic,
-    PaymentEEA, PaymentNonEEA, PaymentTax, RecurringTransferParameters} from './model'
+    PaymentEEA, PaymentNonEEA, PaymentTax, RecurringTransferParameters, PaymentContainer} from './model'
 interface Payments {
     [user: string]: {
         [paymentId: string]: PaymentContainerDomestic | PaymentContainerEEA
@@ -181,4 +181,20 @@ export function setBundleStatus(user: string, bundleId: string, bundleStatus: Bu
     } else {
         throw new Error('Unknown bundle')
     }
+}
+
+export function listPaymentContainers(user: string): PaymentContainer[] {
+    return _(payments[user]).values().value()
+}
+
+export function getPaymentContainer(user: string, paymentId: string): PaymentContainer {
+    return (payments[user] || {})[paymentId]
+}
+
+export function listBundleContainers(user: string): PaymentBundleContainer[] {
+    return _(bundles[user]).values().value()
+}
+
+export function getBundleContainer(user: string, bundleId: string): PaymentBundleContainer {
+    return (bundles[user] || {})[bundleId]
 }
