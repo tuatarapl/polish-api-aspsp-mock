@@ -1,3 +1,4 @@
+import 'polish-api-vue'
 import Vue from 'vue'
 import './components'
 import router from './router'
