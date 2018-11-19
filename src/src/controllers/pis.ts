@@ -6,7 +6,7 @@ import { Swagger20Request } from 'swagger-tools'
 import { AddPayment } from '../service/model'
 import * as paymentService from '../service/payment'
 import { lookupToken } from '../service/token'
-import './model'
+import {} from './model'
 const trace = debug('aspsp-mock:controllers:ais')
 
 function paymentHandler(requestParameter: string, service: (user: string, payment: any) => AddPayment):
