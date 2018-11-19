@@ -9,7 +9,7 @@
     "format": "tslint 'src/**/*.ts' --fix",
     "lint": "tslint 'src/**/*.ts'",
     "start": "node target",
-    "generate-data": "node target/generator/run"
+    "generate-data": "node target/generator"
   },
   "nyc": {
     "all": true,
@@ -64,6 +64,7 @@
     "moment": "^2.22.2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "polish-api-generator": "git+ssh://git@bitbucket.org/tuatarapl/polish-api-generator.git",
     "polish-api-model": "git+ssh://git@bitbucket.org/tuatarapl/polish-api-model.git",
     "session-file-store": "^1.2.0",
     "swagger-tools": "^0.10.4",
