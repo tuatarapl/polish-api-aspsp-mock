@@ -1,0 +1,8 @@
+src/.nyc_output
+src/coverage
+src/data
+src/node_modules
+src/sessions
+src/target
+src/web/node_modules
+src/web/dist
