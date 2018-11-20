@@ -85,28 +85,23 @@ export const psu: RouteConfig[] = [{
             path: 'consent/:consentId',
             component: Vue.extend({
               template: `
-<div class="row">
-    <div class="col-12">
-        <div class="form-group">
-            <label for="consentId">Internal Consent Id</label>
-            <input type="text" class="form-control" id="consentId" v-model="consent.id" readonly/>
-        </div>
-        <div class="form-group">
-            <label for="consentId">TPP Id</label>
-            <input type="text" class="form-control" id="consentId" v-model="consent.tppId" readonly/>
-        </div>
-        <div class="form-group">
-            <label for="consentId">Status</label>
-            <input type="text" class="form-control" id="consentId" v-model="consent.status" readonly/>
-        </div>
-        <div class="form-group">
-            <label for="consentId">Scope</label>
-            <input type="text" class="form-control" id="consentId" v-model="consent.scope" readonly/>
-        </div>
-        <consent-edit :consent="consent" :readonly="true"></consent-edit>
-        <router-link :to="{name:'consents'}">Back</router-link>
-    </div>
-</div>
+<dl class="row" v-if="consent">
+    <dt class="col-sm-3">Internal Consent Id</dt>
+    <dd class="col-sm-9">{{consent.id}}</dd>
+
+    <dt class="col-sm-3">TPP Id</dt>
+    <dd class="col-sm-9">{{consent.tppId}}</dd>
+
+    <dt class="col-sm-3">Status</dt>
+    <dd class="col-sm-9">{{consent.status}}</dd>
+
+    <dt class="col-sm-3">Scope</dt>
+    <dd class="col-sm-9">{{consent.scope}}</dd>
+
+    <dt class="col-sm-3">Consent</dt>
+    <dd class="col-sm-9"><consent-view :consent="consent"></consent-view></dd>
+    <router-link :to="{name:'consents'}">Back</router-link>
+</dl>
 `,
                 data() {
                   return {
