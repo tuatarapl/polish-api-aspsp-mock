@@ -60,7 +60,7 @@ export const psu: RouteConfig[] = [{
                 </tr>
             </tbody>
         </table>
-    <div>
+    </div>
 </div>
 `,
                 data() {
@@ -105,7 +105,7 @@ export const psu: RouteConfig[] = [{
         </div>
         <consent-edit :consent="consent" :readonly="true"></consent-edit>
         <router-link :to="{name:'consents'}">Back</router-link>
-    <div>
+    </div>
 </div>
 `,
                 data() {
