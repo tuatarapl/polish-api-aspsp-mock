@@ -53,8 +53,9 @@ module.exports = {
         })
     ],
     resolve: {
+        symlinks: false,
         alias: {
-            'vue$': 'vue/dist/vue.esm.js'
+            'vue$': path.resolve('node_modules/vue/dist/vue.esm.js')
         }
     }
 }
