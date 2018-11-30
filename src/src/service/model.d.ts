@@ -54,15 +54,17 @@ export interface AddPayment {
     paymentId: string
     generalStatus: GeneralStatus
     detailedStatus: string
+    executionMode?: ExecutionMode
 }
 
 export interface GetPayment extends AddPayment {
-    executionMode: ExecutionMode
+
 }
 
 export interface AddBundle {
     bundleId?:string
     bundleStatus: BundleStatus
+    payments?: GetPayment[]
 }
 
 export interface GetBundle extends AddBundle {

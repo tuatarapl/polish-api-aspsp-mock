@@ -133,19 +133,22 @@ export function tax(user: string, payment: PaymentTax): AddPayment {
 export function transferBundle(user: string, bundle: PaymentBundle): AddBundle {
     const bundleId = uuid4()
     const bundleStatus = generateBundleStatus()
+    const $payments = _.flatten([
+        _(bundle.domesticTransfers).map(_.partial(domestic, user)).value(),
+        _(bundle.EEATransfers).map(_.partial(EEA, user)).value(),
+        _(bundle.nonEEATransfers).map(_.partial(nonEEA, user)).value(),
+        _(bundle.taxTransfers).map(_.partial(tax, user)).value()
+    ])
     bundles[user] = bundles[user] || {}
     bundles[user][bundleId] = {
         bundleId,
         bundle,
         bundleStatus,
-        payments: _.flatten([
-            _(bundle.domesticTransfers).map(_.partial(domestic, user)).value(),
-            _(bundle.EEATransfers).map(_.partial(EEA, user)).value(),
-            _(bundle.nonEEATransfers).map(_.partial(nonEEA, user)).value(),
-            _(bundle.taxTransfers).map(_.partial(tax, user)).value()
-        ])
+        payments: $payments
     }
-    return {bundleId, bundleStatus}
+    return {bundleId, bundleStatus, payments:
+        _.map($payments, ({paymentId, generalStatus, detailedStatus, executionMode}) =>
+        ({paymentId, generalStatus, detailedStatus, executionMode}))}
 }
 
 export function getPayments(...paymentsToGet: Array<{user: string, paymentId: string}>): GetPayment[] {

@@ -23,7 +23,9 @@ function paymentHandler(requestParameter: string, service: (user: string, paymen
                 sendDate: moment().toISOString(),
                 isCallback: false
                 },
-                ...addPayment
+                paymentId: addPayment.paymentId,
+                generalStatus: addPayment.generalStatus,
+                detailedStatus: addPayment.detailedStatus
             }
         res.send(response)
     }
