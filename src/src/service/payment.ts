@@ -27,12 +27,12 @@ const bundles: Bundles = {}
 
 const generalStatuses: GeneralStatus[] = ['cancelled', 'done', 'pending', 'rejected', 'scheduled', 'submitted']
 const detailedStatuses: {[generalStatus: string]: string[]} = {
-    cancelled: [],
-    done: [],
-    pending: [],
-    rejected: [],
-    scheduled: [],
-    submitted: []
+    cancelled: ['Cancelled'],
+    done: ['Done'],
+    pending: ['Pending'],
+    rejected: ['Rejected'],
+    scheduled: ['Scheduled'],
+    submitted: ['Submitted']
 }
 
 function generateGeneralStatus(): GeneralStatus {
