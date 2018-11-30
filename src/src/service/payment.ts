@@ -1,11 +1,14 @@
 
+import debug = require('debug')
 import * as _ from 'lodash'
 import * as uuid4 from 'uuid/v4'
 import { AddBundle, AddPayment, BundleStatus,
     ExecutionMode, GeneralStatus, GetBundle,
-    GetPayment, PaymentBundle, PaymentBundleContainer, PaymentContainerDomestic,
-    PaymentContainerEEA, PaymentContainerNonEEA, PaymentContainerTax, PaymentDomestic,
-    PaymentEEA, PaymentNonEEA, PaymentTax, RecurringTransferParameters, PaymentContainer} from './model'
+    GetPayment, PaymentBundle, PaymentBundleContainer, PaymentContainer,
+    PaymentContainerDomestic, PaymentContainerEEA, PaymentContainerNonEEA, PaymentContainerTax,
+    PaymentDomestic, PaymentEEA, PaymentNonEEA, PaymentTax, RecurringTransferParameters} from './model'
+
+const trace = debug('aspsp-mock:service:payment')
 interface Payments {
     [user: string]: {
         [paymentId: string]: PaymentContainerDomestic | PaymentContainerEEA

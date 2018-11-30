@@ -75,7 +75,7 @@ export function getBundle(req: Swagger20Request<any>, res: Response) {
     trace(`bundle ${JSON.stringify(bundleRequest)}`)
     trace(`tokenData ${JSON.stringify(req.tokenData)}`)
     const getBundleResponse = paymentService.getBundle(req.tokenData.sub,
-        bundleRequest.paymentId, bundleRequest.transactionsIncluded)
+        bundleRequest.bundleId, bundleRequest.transactionsIncluded)
     trace(`getBundle ${JSON.stringify(getBundleResponse)}`)
     if (getBundleResponse) {
         const response = {
