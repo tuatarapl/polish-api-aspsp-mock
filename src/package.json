@@ -33,7 +33,7 @@
     ]
   },
   "author": "Grzegorz Abramczyk <grzegorz.abramczyk@tuatara.pl>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "@types/basic-auth": "^1.1.2",
     "@types/chai": "^4.1.7",
