@@ -44,7 +44,7 @@ export const login: RouteConfig = {
         </nav>
         <div class="row>
           <div class="col-12>
-            <form>
+            <form @submit.prevent="login()">
               <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" placeholder="Username" v-model="username">
@@ -53,7 +53,7 @@ export const login: RouteConfig = {
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" placeholder="Password" v-model="password">
               </div>
-              <button type="button" class="btn btn-primary" @click="login()">Login</button>
+              <button type="submit" class="btn btn-primary">Login</button>
             </form>
           </div>
         </div>
