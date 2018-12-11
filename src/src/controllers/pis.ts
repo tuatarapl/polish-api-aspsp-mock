@@ -131,7 +131,7 @@ export function cancelPayments(req: Swagger20Request<any>, res: Response) {
     if (paymentData.paymentId) {
         paymentService.setPaymentStatus(req.tokenData.sub, paymentData.paymentId, 'cancelled')
     } else if (paymentData.bundleId) {
-        paymentService.setBundleStatus(req.tokenData.sub, paymentData.paymentId, 'cancelled')
+        paymentService.setBundleStatus(req.tokenData.sub, paymentData.bundleId, 'cancelled')
     }
     const response = {
         responseHeader: {
