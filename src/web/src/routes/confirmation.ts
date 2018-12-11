@@ -35,7 +35,7 @@ export const confirmation: RouteConfig[] = [{
                   </ul>
               </div>
           </nav>
-          <consent-edit :consent="consent" :accounts="accounts"></consent-edit>
+          <consent-edit v-if="consent" :consent="consent" :accounts="accounts"></consent-edit>
           <button type="button" class="btn btn-primary" @click="doConfirm()">Confirm</button>
         </div>`,
         beforeRouteEnter(to, from, next) {
