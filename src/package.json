@@ -12,7 +12,6 @@
     "generate-data": "node target/generator"
   },
   "nyc": {
-    "all": true,
     "extension": [
       ".ts",
       ".tsx"
@@ -25,12 +24,15 @@
     ],
     "reporter": [
       "html",
-      "text"
+      "text",
+      "lcov"
     ],
     "require": [
-      "ts-node/register",
+      "ts-node/register/transpile-only",
       "source-map-support/register"
-    ]
+    ],
+    "sourceMap": true,
+    "instrument": true
   },
   "author": "Grzegorz Abramczyk <grzegorz.abramczyk@tuatara.pl>",
   "license": "MIT",
@@ -51,7 +53,7 @@
     "@types/uuid": "^3.4.4",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
+    "nyc": "^13.2.0",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "typescript": "^3.1.4"
