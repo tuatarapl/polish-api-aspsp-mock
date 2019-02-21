@@ -59,7 +59,7 @@ function generateExecutionMode(payment: {
         return payment.executionMode
     } else if (payment.transferData.recurrence) {
         return 'Recurring'
-    } else if (payment.transferData.recurrence) {
+    } else if (payment.transferData.executionDate) {
         return 'FutureDated'
     } else {
         return 'Immediate'
