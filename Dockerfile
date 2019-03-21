@@ -1,6 +1,4 @@
 FROM node:latest as builder
-ADD deploy_rsa  /root/.ssh/id_rsa
-RUN ssh -oStrictHostKeyChecking=no git@bitbucket.org -v
 ADD src /src
 WORKDIR /src/web
 RUN npm install
