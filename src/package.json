@@ -66,8 +66,8 @@
     "moment": "^2.22.2",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "polish-api-generator": "git+ssh://git@github.com:tuatarapl/polish-api-generator.git",
-    "polish-api-model": "git+ssh://git@github.com:tuatarapl/polish-api-model.git",
+    "polish-api-generator": "git://github.com:tuatarapl/polish-api-generator.git",
+    "polish-api-model": "git://github.com:tuatarapl/polish-api-model.git",
     "session-file-store": "^1.2.0",
     "swagger-tools": "^0.10.4",
     "uuid": "^3.3.2"
