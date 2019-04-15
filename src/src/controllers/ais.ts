@@ -8,6 +8,8 @@ import { deleteConsent as deleteConsentService} from '../service/consent'
 import * as transactionsService from '../service/transactions'
 import {PageConfig, PageInfo, TransactionFilter} from './model'
 const trace = debug('aspsp-mock:controllers:ais')
+const requestLog = debug('aspsp-mock:controllers:ais:request')
+const responseLog = debug('aspsp-mock:controllers:ais:responseLog')
 
 function  paginate<T>(items: T[], pageConfig?: PageConfig): {items: T[], pageInfo: PageInfo} {
     pageConfig = _.assign({pageId: '0', perPage: 10}, pageConfig)
@@ -27,6 +29,7 @@ function  paginate<T>(items: T[], pageConfig?: PageConfig): {items: T[], pageInf
 
 export function getAccounts(req: Swagger20Request<any>, res: Response) {
     const getAccountsRequest = req.swagger.params.getAccountsRequest.value
+    requestLog(getAccountsRequest)
     trace(`getAccountsRequest ${JSON.stringify(getAccountsRequest)}`)
     trace(`tokenData ${JSON.stringify(req.tokenData)}`)
     const {items: accounts, pageInfo} = paginate(accountsService.getAccounts(req.tokenData.sub)
@@ -41,11 +44,13 @@ export function getAccounts(req: Swagger20Request<any>, res: Response) {
             accounts,
             pageInfo
         }
+    responseLog(response)
     res.send(response)
 }
 
 export function getAccount(req: Swagger20Request<any>, res: Response) {
     const getAccountRequest = req.swagger.params.getAccountRequest.value
+    requestLog(getAccountRequest)
     trace(`getAccountRequest ${JSON.stringify(getAccountRequest)}`)
     trace(`tokenData ${JSON.stringify(req.tokenData)}`)
     const account = accountsService.getAccount(req.tokenData.sub, getAccountRequest.accountNumber)
@@ -59,6 +64,7 @@ export function getAccount(req: Swagger20Request<any>, res: Response) {
             },
             account
         }
+        responseLog(response)
         res.send(response)
     } else {
         const response = {
@@ -70,6 +76,7 @@ export function getAccount(req: Swagger20Request<any>, res: Response) {
             code: '0001',
             message: 'Account not found'
         }
+        responseLog(response)
         res.status(404).send(response)
     }
 }
@@ -80,6 +87,7 @@ function historyHandler<T>(serviceFunction: (userId: string, accountNumber: stri
                                              (req: Swagger20Request<any>, res: Response) => void {
     return (req: Swagger20Request<any>, res: Response) => {
         const payloadObject = req.swagger.params[payloadObjectName].value
+        requestLog(payloadObject)
         trace(`${payloadObjectName} ${JSON.stringify(payloadObject)}`)
         trace(`tokenData ${JSON.stringify(req.tokenData)}`)
         const {items: transactions, pageInfo} = paginate(
@@ -95,6 +103,7 @@ function historyHandler<T>(serviceFunction: (userId: string, accountNumber: stri
                 [responseListName]: transactions,
                 pageInfo
             }
+        responseLog(response)
         res.send(response)
     }
 }
@@ -113,6 +122,7 @@ export const getHolds =
 
 export function getTransactionDetail(req: Swagger20Request<any>, res: Response) {
     const getTransactionDetailRequest = req.swagger.params.getTransationDetailRequest.value
+    requestLog(getTransactionDetailRequest)
     trace(`getTransactionDetailRequest ${JSON.stringify(getTransactionDetailRequest)}`)
     trace(`tokenData ${JSON.stringify(req.tokenData)}`)
     const transaction = transactionsService.getTransactionDetail(req.tokenData.sub,
@@ -127,6 +137,7 @@ export function getTransactionDetail(req: Swagger20Request<any>, res: Response) 
             },
             ...transaction
         }
+        responseLog(response)
         res.send(response)
     } else {
         const response = {
@@ -138,12 +149,14 @@ export function getTransactionDetail(req: Swagger20Request<any>, res: Response) 
             code: '0002',
             message: 'Transaction not found'
         }
+        responseLog(response)
         res.status(404).send(response)
     }
 }
 
 export function deleteConsent(req: Swagger20Request<any>, res: Response) {
     const deleteConsentRequest = req.swagger.params.deleteConsentRequest.value
+    requestLog(deleteConsentRequest)
     trace(`deleteConsentRequest ${JSON.stringify(deleteConsentRequest)}`)
     trace(`tokenData ${JSON.stringify(req.tokenData)}`)
     const success = deleteConsentService(req.tokenData.sub, deleteConsentRequest.consentId)
