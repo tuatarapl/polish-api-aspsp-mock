@@ -4,8 +4,8 @@
   "description": "Mock implementation of ASPSP exposing Polish API interface.",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack -w -d"
+    "build": "npx webpack",
+    "watch": "npx webpack -w -d"
   },
   "author": "Grzegorz Abramczyk <grzegorz.abramczyk@tuatara.pl>",
   "license": "MIT",
