@@ -12,7 +12,6 @@ var sign = function (req, res, next) {
         payload: res.body,
         secret: fs.readFileSync(__dirname + "/../../crypto/tpp.cer"),
     }).replace(/\..*\./, '..');
-    console.error("1")
     res.body = payload;
     next();
 }
@@ -22,21 +21,19 @@ const verify = function (req, res, next) {
     if (!detachedSignature) {
         console.error("detachedSignature is falsy")
         next()
-        //throw expection;
+        //throw expection or what to do in situation like this?
     }
-    console.error(detachedSignature)
     let signature = detachedSignature.replace('..', '..', `.${new Buffer(req.raw, 'utf8').toString('base64').split('=')[0]}.`);
-    console.error("signature: " + signature)
     if (jws.verify(signature, "RS256") != fs.readFileSync(__dirname + '/../../crypto/tpp.cer')) {
         console.error("certs are not same")
         next()
-        //throw exception
+        //throw expection or what to do in situation like this?
     }
     const signatureFlag = req.headers['x-jws-signature-ok']
     if (!signatureFlag) {
         console.error("signatureFlag theres no signature flag")
         next()
-        //throw exception
+        //throw expection or what to do in situation like this?
     }
     next();
 }
