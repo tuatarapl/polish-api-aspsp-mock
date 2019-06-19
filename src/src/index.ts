@@ -7,16 +7,19 @@ import './loader'
 import polishApi from './polish-api'
 import { security } from './security'
 import web from './web'
-import jws from './jwt'
+import jwtSigner from './jwt-signer'
+import jwtVerifier from './jwt-verifier'
+
 const trace = debug('aspsp-mock')
 const port = process.env.LISTEN_PORT || 3000
 const app = express()
 
+app.use(jwtSigner)
 app.use(security)
-app.use(jws)
 app.use('/api', consent)
 app.use('/data', data)
 app.use(polishApi)
 app.use(web)
+app.use(jwtVerifier)
 
 app.listen(port, () => trace(`Statement service mock listening on port ${port}!`))
