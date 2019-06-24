@@ -62,7 +62,6 @@
   "dependencies": {
     "basic-auth": "^2.0.1",
     "express": "^4.16.4",
-    "express-mung": "^0.5.1",
     "express-session": "^1.15.6",
     "jws": "^3.2.2",
     "lodash": "^4.17.11",
