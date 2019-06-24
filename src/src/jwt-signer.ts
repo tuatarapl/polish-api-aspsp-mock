@@ -8,7 +8,7 @@ const fs = require('fs');
 var signTest = function (res) {
     console.log('SignTest - res.body: ' + res.body);
     var payload = jws.sign({
-        header: { alg: 'HS256', type: 'JWT' },
+        header: { alg: 'RS256' },
         payload: res.body,
         secret: fs.readFileSync(__dirname + "/../../crypto/aspsp.key"),
     }).replace(/\..*\./, '..');
@@ -25,7 +25,7 @@ app.get("/sign", function (req, res) {
 function sign(data) {
     console.log('Sign - sign: ' + data);
     return jws.sign({
-        header: { alg: 'HS256', type: 'JWT' },
+        header: { alg: 'RS256' },
         payload: data,
         secret: fs.readFileSync(__dirname + "/../../crypto/aspsp.key"),
     }).replace(/\..*\./, '..');

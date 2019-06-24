@@ -27,7 +27,7 @@ const verify = function (req, res) {
     let signature = detachedSignature.replace('..', `.${new Buffer(req.rawBody, 'utf8').toString('base64').split('=')[0]}.`);
     console.log('Verify - Signature: ' + signature);
     console.log('Verify - aspsp.cer: ' + fs.readFileSync(__dirname + '/../../crypto/aspsp.cer'));
-    if (!jws.verify(signature, "HS256", fs.readFileSync(__dirname + '/../../crypto/aspsp.cer'))) {
+    if (!jws.verify(signature, "RS256", fs.readFileSync(__dirname + '/../../crypto/aspsp.cer'))) {
         console.error("certificates are not same")
         res.status(401).send({
             "responseHeader": {
@@ -40,7 +40,7 @@ const verify = function (req, res) {
         })
         return 'NO';
     }
-    console.log('Verify - jws.verify: ' + jws.verify(detachedSignature, "HS256", fs.readFileSync(__dirname + '/../../crypto/aspsp.cer')));
+    console.log('Verify - jws.verify: ' + jws.verify(signature, "RS256", fs.readFileSync(__dirname + '/../../crypto/aspsp.cer')));
     console.log('Verify - END OF VERIFY');
     return 'OK';
 }
