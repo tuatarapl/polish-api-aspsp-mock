@@ -33,21 +33,9 @@ function sign(data) {
 
 function responseInterceptor(req, res, next) {
     var originalSend = res.send;
-    var seen = [];
-    arguments[0] = JSON.stringify(arguments[0], function (key, val) {
-        if (val != null && typeof val == "object") {
-            if (seen.indexOf(val) >= 0) {
-                return;
-            }
-            seen.push(val);
-        }
-        return val;
-    });
-
-    console.log('ResponseInterceptor: ' + arguments[0]);
-
     res.send = function () {
         if (arguments[0] != null) {
+            arguments[0] = JSON.stringify(arguments[0]);
             res.set({
                 'x-jws-signature': sign(arguments[0]),
                 'content-type': 'application/json'

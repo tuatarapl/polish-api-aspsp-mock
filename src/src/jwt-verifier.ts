@@ -26,8 +26,45 @@ const verify = function (req, res) {
     console.log('Verify - typeOf(req.rawBody): ' + typeof (req.rawBody));
     let signature = detachedSignature.replace('..', `.${new Buffer(req.rawBody, 'utf8').toString('base64').split('=')[0]}.`);
     console.log('Verify - Signature: ' + signature);
-    console.log('Verify - aspsp.cer: ' + fs.readFileSync(__dirname + '/../../crypto/aspsp.cer'));
-    if (!jws.verify(signature, "RS256", fs.readFileSync(__dirname + '/../../crypto/aspsp.cer'))) {
+    const tppId = req.headers['tpp-id'];
+    console.log('Request headers: ' + JSON.stringify(req.headers));
+    if (tppId == null) {
+        console.error("tpp id not found");
+        res.status(401).send({
+            "responseHeader": {
+                "requestId": req.headers.requestId,
+                "sendDate": moment().toISOString(),
+                "isCallback": true
+            },
+            "code": "TPP_ID_NOT_FOUND",
+            "message": "Tpp id not found."
+        })
+        return 'NO';
+    }
+
+    let fileStream;
+    try {
+        fileStream = fs.readFileSync(__dirname + '/../../crypto/' + tppId + '.cer');
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            console.log('File not found!');
+            res.status(401).send({
+                "responseHeader": {
+                    "requestId": req.headers.requestId,
+                    "sendDate": moment().toISOString(),
+                    "isCallback": true
+                },
+                "code": "CERIFICATE_NOT_FOUND",
+                "message": "Certificate for tpp not found."
+            })
+            return 'NO';
+        } else {
+            throw err;
+        }
+    }
+    console.log('Verify - ' + tppId + '.cer: ' + fileStream);
+
+    if (!jws.verify(signature, "RS256", fileStream)) {
         console.error("certificates are not same")
         res.status(401).send({
             "responseHeader": {
@@ -40,7 +77,7 @@ const verify = function (req, res) {
         })
         return 'NO';
     }
-    console.log('Verify - jws.verify: ' + jws.verify(signature, "RS256", fs.readFileSync(__dirname + '/../../crypto/aspsp.cer')));
+    console.log('Verify - jws.verify' + tppId + '.cer: ' + fileStream);
     console.log('Verify - END OF VERIFY');
     return 'OK';
 }
