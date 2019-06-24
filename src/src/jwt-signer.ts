@@ -6,13 +6,13 @@ const jws = require('jws');
 const fs = require('fs');
 
 var signTest = function (res) {
-    console.log(res.body);
+    console.log('SignTest - res.body: ' + res.body);
     var payload = jws.sign({
-        header: { alg: 'HS256', type: 'JWT' },
+        header: { alg: 'RS256', type: 'JWT' },
         payload: res.body,
         secret: fs.readFileSync(__dirname + "/../../crypto/aspsp.key"),
     }).replace(/\..*\./, '..');
-    console.log(payload);
+    console.log('SignTest - payload: ' + payload);
     res.body = payload;
     return payload;
 }
@@ -23,9 +23,9 @@ app.get("/sign", function (req, res) {
 });
 
 function sign(data) {
-    console.log(data);
+    console.log('Sign - sign: ' + data);
     return jws.sign({
-        header: { alg: 'HS256', type: 'JWT' },
+        header: { alg: 'RS256', type: 'JWT' },
         payload: data,
         secret: fs.readFileSync(__dirname + "/../../crypto/aspsp.key"),
     }).replace(/\..*\./, '..');
@@ -33,10 +33,26 @@ function sign(data) {
 
 function responseInterceptor(req, res, next) {
     var originalSend = res.send;
+    var seen = [];
+    arguments[0] = JSON.stringify(arguments[0], function (key, val) {
+        if (val != null && typeof val == "object") {
+            if (seen.indexOf(val) >= 0) {
+                return;
+            }
+            seen.push(val);
+        }
+        return val;
+    });
+
+    console.log('ResponseInterceptor: ' + arguments[0]);
 
     res.send = function () {
-        arguments[0] = sign(arguments[0]);
-        console.log(arguments[0]);
+        if (arguments[0] != null) {
+            res.set({
+                'x-jws-signature': sign(arguments[0]),
+                'content-type': 'application/json'
+            })
+        }
         originalSend.apply(res, arguments);
     };
     next();
