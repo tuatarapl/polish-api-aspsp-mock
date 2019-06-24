@@ -9,12 +9,10 @@ import { security } from './security'
 import web from './web'
 import jwtSigner from './jwt-signer'
 import jwtVerifier from './jwt-verifier'
-import rawBody from "./raw-body";
 const trace = debug('aspsp-mock')
 const port = process.env.LISTEN_PORT || 3000
 const app = express()
 
-app.use(rawBody)
 app.use(jwtSigner)
 app.use(security)
 app.use('/api', consent)
