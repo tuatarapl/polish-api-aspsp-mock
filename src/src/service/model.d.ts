@@ -1,16 +1,16 @@
 
-import { TransactionDetail, TransactionInfo, TransactionPendingInfo, 
-    TransactionRejectedInfo, TransactionCancelledInfo, 
-    TransactionScheduledInfo, HoldInfo, ExecutionMode, PaymentDomestic, 
-    PaymentEEA, PaymentNonEEA, PaymentTax, PaymentBundle } from 'polish-api-model'
+import { ExecutionMode, HoldInfo, PaymentBundle,
+    PaymentDomestic, PaymentEEA,
+    PaymentNonEEA, PaymentTax, TransactionCancelledInfo, TransactionDetail,
+    TransactionInfo, TransactionPendingInfo, TransactionRejectedInfo, TransactionScheduledInfo } from 'polish-api-model'
 
 export * from 'polish-api-model'
 export type TransactionKind = 'done' | 'pending' | 'rejected' | 'cancelled' | 'scheduled' | 'hold'
 export interface TransactionDetailExt extends TransactionDetail {
-    baseInfo: TransactionInfo 
-        & TransactionPendingInfo 
-        & TransactionRejectedInfo 
-        & TransactionCancelledInfo 
+    baseInfo: TransactionInfo
+        & TransactionPendingInfo
+        & TransactionRejectedInfo
+        & TransactionCancelledInfo
         & TransactionScheduledInfo
         & HoldInfo
     kind: TransactionKind
@@ -42,7 +42,7 @@ export interface PaymentContainerTax  extends PaymentContainer {
     payment: PaymentTax
 }
 
-export type BundleStatus = 'inProgress' | 'cancelled' | 'done' | 'partiallyDone' 
+export type BundleStatus = 'inProgress' | 'cancelled' | 'done' | 'partiallyDone'
 export interface PaymentBundleContainer {
     bundle: PaymentBundle
     bundleId?: string
@@ -62,7 +62,7 @@ export interface GetPayment extends AddPayment {
 }
 
 export interface AddBundle {
-    bundleId?:string
+    bundleId?: string
     bundleStatus: BundleStatus
     payments?: GetPayment[]
 }

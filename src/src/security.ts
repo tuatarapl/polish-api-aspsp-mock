@@ -4,7 +4,7 @@ import * as session from 'express-session'
 import * as passport from 'passport'
 import {Strategy as LocalStrategy} from 'passport-local'
 import * as FileStore from 'session-file-store'
-import { capture } from './raw-body';
+import { capture } from './raw-body'
 import {get as getConsent} from './service/consent'
 import { lookupToken } from './service/token'
 import { logIn } from './service/user'
