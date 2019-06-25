@@ -1,29 +1,11 @@
-const express = require('express')
+import * as express from 'express'
+import * as fs from 'fs'
+import * as jws from 'jws'
+
 const app = express()
 export default app
 
-const jws = require('jws')
-const fs = require('fs')
-
-const signTest = function(res) {
-    console.log('SignTest - res.body: ' + res.body)
-    const payload = jws.sign({
-        header: { alg: 'RS256' },
-        payload: res.body,
-        secret: fs.readFileSync(__dirname + '/../../crypto/aspsp.key')
-    }).replace(/\..*\./, '..')
-    console.log('SignTest - payload: ' + payload)
-    res.body = payload
-    return payload
-}
-
-app.get('/sign', function(req, res) {
-    const v = { body: { test: '123' } }
-    res.send(signTest(v))
-})
-
 function sign(data) {
-    console.log('Sign - sign: ' + data)
     return jws.sign({
         header: { alg: 'RS256' },
         payload: data,
@@ -33,7 +15,7 @@ function sign(data) {
 
 function responseInterceptor(req, res, next) {
     const originalSend = res.send
-    res.send = function() {
+    res.send = () => {
         if (arguments[0] != null) {
             arguments[0] = JSON.stringify(arguments[0])
             res.set({
