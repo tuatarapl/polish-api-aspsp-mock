@@ -9,71 +9,46 @@ export default router
 const verify = (req, res, next) => {
     const detachedSignature = req.headers['x-jws-signature']
     if (!detachedSignature) {
-        res.status(401).send({
-            responseHeader: {
-                requestId: req.headers.requestId,
-                sendDate: moment().toISOString(),
-                isCallback: true
-            },
-            code: 'INCORRECT_SIGNATURE',
-            message: 'Signature is empty.'
-        })
+        errorHandler(req, res, 401, 'INCORRECT_SIGNATURE', 'Signature is empty.')
         return
     }
+
     const signature = detachedSignature.replace('..', `.${new Buffer(req.rawBody, 'utf8').toString('base64').split('=')[0]}.`)
     const tppId = req.headers['x-jws-tpp-id']
-    if (tppId === null || tppId === undefined) {
-        res.status(401).send({
-            responseHeader: {
-                requestId: req.headers.requestId,
-                sendDate: moment().toISOString(),
-                isCallback: true
-            },
-            code: 'TPP_ID_NOT_FOUND',
-            message: 'Tpp id not found.'
-        })
+    if (!tppId) {
+        errorHandler(req, res, 401, 'TPP_ID_NOT_FOUND', 'Tpp id not found.')
         return
     }
+
     let fileStream
     try {
         fileStream = fs.readFileSync(__dirname + `/../../crypto/${tppId}.cer`)
     } catch (err) {
         if (err.code === 'ENOENT') {
-            res.status(401).send({
-                responseHeader: {
-                    requestId: req.headers.requestId,
-                    sendDate: moment().toISOString(),
-                    isCallback: true
-                },
-                code: 'CERIFICATE_NOT_FOUND',
-                message: 'Certificate for tpp not found.'
-            })
+            errorHandler(req, res, 401, 'CERIFICATE_NOT_FOUND', 'Certificate for tpp not found.')
         } else {
-            res.status(401).send({
-                responseHeader: {
-                    requestId: req.headers.requestId,
-                    sendDate: moment().toISOString(),
-                    isCallback: true
-                },
-                code: 'ERROR_READING_FILE',
-                message: 'Problem with reading file.'
-            })
+            errorHandler(req, res, 401, 'ERROR_READING_FILE', 'Problem with reading file.')
         }
         return
     }
+
     if (!jws.verify(signature, 'RS256', fileStream)) {
-        res.status(401).send({
-            responseHeader: {
-                requestId: req.headers.requestId,
-                sendDate: moment().toISOString(),
-                isCallback: true
-            },
-            code: 'CERTIFICATES_NOT_SAME',
-            message: 'There are various certificates.'
-        })
-        return
+        errorHandler(req, res, 401, 'CERTIFICATES_NOT_SAME', 'There are various certificates.')
+        return;
     }
     next()
+}
+
+function errorHandler(req, res, status: number, code: string, message: string) {
+    res.status(status).send({
+        responseHeader: {
+            requestId: req.headers.requestId,
+            sendDate: moment().toISOString(),
+            isCallback: true
+        },
+        code: code,
+        message: message
+    })
 }
 
 router.use(verify)
