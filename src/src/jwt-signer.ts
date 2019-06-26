@@ -15,7 +15,7 @@ function sign(data) {
 
 function responseInterceptor(req, res, next) {
     const originalSend = res.send
-    res.send = () => {
+    res.send = function () {
         if (arguments[0] != null) {
             arguments[0] = JSON.stringify(arguments[0])
             res.set({

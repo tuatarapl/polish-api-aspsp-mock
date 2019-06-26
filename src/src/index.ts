@@ -13,11 +13,11 @@ const trace = debug('aspsp-mock')
 const port = process.env.LISTEN_PORT || 3000
 const app = express()
 
-app.use(jwtSigner)
 app.use(security)
 app.use('/api', consent)
 app.use('/data', data)
-app.use(jwtVerifier)
+app.use(['/v2_1.1/accounts', '/v2_1.1/payments', '/v2_1.1/confirmation'], jwtSigner)
+app.use(['/v2_1.1/accounts', '/v2_1.1/payments', '/v2_1.1/confirmation'], jwtVerifier)
 app.use(polishApi)
 app.use(web)
 

@@ -1,5 +1,5 @@
 import * as debug from 'debug'
-import {Router} from 'express'
+import { Router } from 'express'
 import * as accountsService from './service/accounts'
 import * as paymentService from './service/payment'
 import * as transactionsService from './service/transactions'
