@@ -8,21 +8,22 @@ export default router
 
 const verify = (req, res, next) => {
     const detachedSignature = req.headers['x-jws-signature']
+    const tppId = req.headers['x-jws-tpp-id']
     if (!detachedSignature) {
         errorHandler(req, res, 401, 'INCORRECT_SIGNATURE', 'Signature is empty.')
         return
-    }
-
-    const signature = detachedSignature.replace('..', `.${new Buffer(req.rawBody, 'utf8').toString('base64').split('=')[0]}.`)
-    const tppId = req.headers['x-jws-tpp-id']
-    if (!tppId) {
+    } else if (!tppId) {
         errorHandler(req, res, 401, 'TPP_ID_NOT_FOUND', 'Tpp id not found.')
         return
     }
 
-    let fileStream
+    const signature = detachedSignature.replace('..', `.${new Buffer(req.rawBody, 'utf8').toString('base64').split('=')[0]}.`)
     try {
-        fileStream = fs.readFileSync(__dirname + `/../../crypto/${tppId}.cer`)
+        let fileStream = fs.readFileSync(__dirname + `/../../crypto/${tppId}.cer`)
+        if (!jws.verify(signature, 'RS256', fileStream)) {
+            errorHandler(req, res, 401, 'CERTIFICATES_NOT_SAME', 'There are various certificates.')
+            return
+        }
     } catch (err) {
         if (err.code === 'ENOENT') {
             errorHandler(req, res, 401, 'CERIFICATE_NOT_FOUND', 'Certificate for tpp not found.')
@@ -31,18 +32,13 @@ const verify = (req, res, next) => {
         }
         return
     }
-
-    if (!jws.verify(signature, 'RS256', fileStream)) {
-        errorHandler(req, res, 401, 'CERTIFICATES_NOT_SAME', 'There are various certificates.')
-        return;
-    }
     next()
 }
 
 function errorHandler(req, res, status: number, code: string, message: string) {
     res.status(status).send({
         responseHeader: {
-            requestId: req.headers.requestId,
+            requestId: req.headers['X-REQUEST-ID'],
             sendDate: moment().toISOString(),
             isCallback: true
         },
