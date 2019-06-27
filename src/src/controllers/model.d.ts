@@ -1,5 +1,5 @@
-import { Consent } from '../service/consent'
-import { TokenData } from '../service/token'
+import { TokenData } from "../service/token";
+import { Consent } from "../service/consent";
 
 export interface PageConfig {
     pageId?: string
