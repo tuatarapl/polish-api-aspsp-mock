@@ -13,7 +13,7 @@ const verify = (req, res, next) => {
         if (tppId) {
             const signature = detachedSignature.replace('..', `.${new Buffer(req.rawBody, 'utf8').toString('base64').split('=')[0]}.`)
             try {
-                let fileStream = fs.readFileSync(__dirname + `/../../crypto/${tppId}.cer`)
+                let fileStream = fs.readFileSync(__dirname + `/../../crypto/jwt/${tppId}.cer`)
                 if (!jws.verify(signature, 'RS256', fileStream)) {
                     errorHandler(req, res, 401, 'CERTIFICATES_NOT_SAME', 'There are various certificates.')
                 } else {

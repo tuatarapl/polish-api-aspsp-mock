@@ -9,7 +9,7 @@ function sign(data) {
     return jws.sign({
         header: { alg: 'RS256' },
         payload: data,
-        secret: fs.readFileSync(__dirname + '/../../crypto/aspsp.key')
+        secret: fs.readFileSync(__dirname + '/../../crypto/jwt/aspsp.key')
     }).replace(/\..*\./, '..')
 }
 
