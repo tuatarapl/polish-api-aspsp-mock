@@ -7,6 +7,7 @@ export interface TokenData {
 
 const accessCodes: {[accessCode: string]: string} = {}
 const tokens: {[token: string]: TokenData} = {}
+const refreshTokens: {[refreshToken: string]: string} = {}
 
 export function generateAccessCode(token: string): string {
     const accessCode = uuid4()
@@ -22,6 +23,16 @@ export function generateToken(tokenData: TokenData): string {
 
 export function lookupAccessCode(accessCode: string): string {
     return accessCodes[accessCode]
+}
+
+export function generateRefreshToken(token: string): string {
+    const refreshToken = uuid4()
+    refreshTokens[refreshToken] = token
+    return refreshToken
+}
+
+export function lookupRefreshToken(refreshToken: string): string {
+    return refreshTokens[refreshToken]
 }
 
 export function lookupToken(token: string): TokenData {

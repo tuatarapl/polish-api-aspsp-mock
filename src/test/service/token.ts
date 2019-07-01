@@ -14,7 +14,17 @@ describe('service', function() {
                 expect(service.lookupAccessCode(accessCode)).to.be.equals(token)
             })
         })
-        describe('generateAccessCode and lookupAccessCode', function() {
+        describe('generateRefreshToken and lookupRefreshToken', function() {
+            const token = 'token'
+            it('should generate refresh token', function() {
+                expect(service.generateRefreshToken(token)).to.be.not.empty
+            })
+            it('should generate resolvable refresh token', function() {
+                const refreshToken = service.generateRefreshToken(token)
+                expect(service.lookupRefreshToken(refreshToken)).to.be.equals(token)
+            })
+        })
+        describe('generateToken and lookupToken', function() {
             const tokenData = {sub: 'sub'}
             it('should generate token code', function() {
                 expect(service.generateToken(tokenData)).to.be.not.empty
