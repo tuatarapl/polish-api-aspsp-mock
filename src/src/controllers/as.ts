@@ -1,9 +1,9 @@
 import { Response } from 'express'
 import * as moment from 'moment'
 import { Swagger20Request } from 'swagger-tools'
-import {Consent, get, post} from '../service/consent'
-import {generateRefreshToken, lookupAccessCode, lookupRefreshToken, lookupToken} from '../service/token'
-const deployBaseUrl = process.env.DEPLOY_BASE_URL || 'http://localhost:3000'
+import { Consent, get, post } from '../service/consent'
+import { generateRefreshToken, lookupAccessCode, lookupRefreshToken, lookupToken } from '../service/token'
+const deployBaseUrl = process.env.DEPLOY_BASE_URL || 'https://localhost:3000'
 
 export function authorize(req: Swagger20Request<any>, res: Response) {
     const authorizeRequest = req.swagger.params.authorizeRequest.value
@@ -21,12 +21,12 @@ export function authorize(req: Swagger20Request<any>, res: Response) {
     url.searchParams.append('consentId', consentId)
     const response = {
         responseHeader: {
-          requestId: authorizeRequest.requestHeader.requestId,
-          sendDate: moment().toISOString(),
-          isCallback: false
+            requestId: authorizeRequest.requestHeader.requestId,
+            sendDate: moment().toISOString(),
+            isCallback: false
         },
         aspspRedirectUri: url.toString()
-      }
+    }
     res.send(response)
 }
 export function token(req: Swagger20Request<any>, res: Response) {
