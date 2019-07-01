@@ -2,7 +2,7 @@ import { Response } from 'express'
 import * as moment from 'moment'
 import { Swagger20Request } from 'swagger-tools'
 import { Consent, get, post } from '../service/consent'
-import { lookupAccessCode, lookupToken } from '../service/token'
+import { generateRefreshToken, lookupAccessCode, lookupRefreshToken, lookupToken } from '../service/token'
 const deployBaseUrl = process.env.DEPLOY_BASE_URL || 'https://localhost:3000'
 
 export function authorize(req: Swagger20Request<any>, res: Response) {
@@ -31,22 +31,55 @@ export function authorize(req: Swagger20Request<any>, res: Response) {
 }
 export function token(req: Swagger20Request<any>, res: Response) {
     const tokenRequest = req.swagger.params.tokenRequest.value
-    const accessCode = tokenRequest.Code
-    const accessToken = lookupAccessCode(accessCode)
-    const tokenData = lookupToken(accessToken)
-    const consent = get(tokenData.consentId)
-    const response = {
-        responseHeader: {
+    const grantType = tokenRequest.grant_type
+    if (grantType === 'authorization_code') {
+      const accessCode = tokenRequest.Code
+      const accessToken = lookupAccessCode(accessCode)
+      const tokenData = lookupToken(accessToken)
+      const consent = get(tokenData.consentId)
+      const response = {
+          responseHeader: {
             requestId: tokenRequest.requestHeader.requestId,
             sendDate: moment().toISOString(),
             isCallback: false
+          },
+          access_token: accessToken,
+          token_type: 'Bearer',
+          expires_in: '3600',
+          refresh_token: generateRefreshToken(accessToken),
+          scope: consent.scope,
+          scope_details: consent.scope_details
+        }
+      res.send(response)
+    } else if (grantType === 'refresh_token') {
+      const refreshToken = tokenRequest.refresh_token
+      const accessToken = lookupRefreshToken(refreshToken)
+      const tokenData = lookupToken(accessToken)
+      const consent = get(tokenData.consentId)
+      const response = {
+          responseHeader: {
+            requestId: tokenRequest.requestHeader.requestId,
+            sendDate: moment().toISOString(),
+            isCallback: false
+          },
+          access_token: accessToken,
+          token_type: 'Bearer',
+          expires_in: '3600',
+          refresh_token: generateRefreshToken(accessToken),
+          scope: consent.scope,
+          scope_details: consent.scope_details
+        }
+      res.send(response)
+    } else {
+      const response = {
+        responseHeader: {
+          requestId: tokenRequest.requestHeader.requestId,
+          sendDate: moment().toISOString(),
+          isCallback: false
         },
-        access_token: accessToken,
-        token_type: 'Bearer',
-        expires_in: '3600',
-        refresh_token: 'string',
-        scope: consent.scope,
-        scope_details: consent.scope_details
+        code: 'authorization_code',
+        message: 'Unknown `authorization_code`'
+      }
+      res.status(400).send(response)
     }
-    res.send(response)
 }
