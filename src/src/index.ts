@@ -21,7 +21,9 @@ app.use(polishApi)
 app.use(web)
 
 https.createServer({
-    key: fs.readFileSync(__dirname + '/../src/crypto/ssl/key.pem'),
-    cert: fs.readFileSync(__dirname + '/../src/crypto/ssl/cert.pem'),
-    passphrase: 'passw0rd'
+    key: fs.readFileSync(__dirname + '/../src/crypto/ssl/localhost.key').toString(),
+    cert: fs.readFileSync(__dirname + '/../src/crypto/ssl/localhost.crt').toString(),
+    ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
+    honorCipherOrder: true,
+    secureProtocol: 'TLSv1_2_method'
 }, app).listen(port, () => trace(`Statement service mock listening on port ${port}!`))
