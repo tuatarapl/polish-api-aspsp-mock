@@ -1,5 +1,6 @@
 FROM node:lts as builder
 ADD src /src
+ADD crypto /crypto
 WORKDIR /src/web
 RUN npm install
 RUN npm run build
