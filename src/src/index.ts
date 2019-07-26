@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 import * as debug from 'debug'
 import * as express from 'express'
-import * as https from 'https'
 import * as fs from 'fs'
+import * as https from 'https'
 import consent from './consent'
 import data from './data'
 import jwtSigner from './jwt-signer'
@@ -24,10 +24,15 @@ app.use('/v2_1.1', jwtVerifier)
 app.use(polishApi)
 app.use(web)
 
-https.createServer({
-    key: fs.readFileSync(__dirname + '/../../crypto/ssl/localhost.key').toString(),
-    cert: fs.readFileSync(__dirname + '/../../crypto/ssl/localhost.crt').toString(),
-    ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
-    honorCipherOrder: true,
-    secureProtocol: 'TLSv1_2_method'
-}, app).listen(port, () => trace(`Statement service mock listening on port ${port}!`))
+if (process.env.HTTPS_PROXY) {
+    app.listen(port, () => trace(`Statement service mock listening on port ${port}!`))
+} else {
+    https.createServer({
+        key: fs.readFileSync(__dirname + '/../../crypto/ssl/localhost.key').toString(),
+        cert: fs.readFileSync(__dirname + '/../../crypto/ssl/localhost.crt').toString(),
+        ciphers: 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES256-SHA384',
+        honorCipherOrder: true,
+        secureProtocol: 'TLSv1_2_method'
+    }, app).listen(port, () => trace(`Statement service mock listening on port ${port}!`))
+
+}
