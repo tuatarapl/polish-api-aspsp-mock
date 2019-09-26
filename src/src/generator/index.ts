@@ -15,7 +15,7 @@ function generateUsers(count: number): User[] {
 }
 const users: UserExt[] = generateUsers(10)
 _.forEach(users, (user) => {
-    user.accounts = generator.generateAccounts(_.random(5, 10))
+    user.accounts = generator.generateAccounts(_.random(2, 5))
     _.forEach(user.accounts, (account) => {
         account.transactions = generator.generateTransactions(_.random(10, 100), account)
     })
