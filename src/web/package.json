@@ -15,7 +15,7 @@
     "css-loader": "^1.0.0",
     "file-loader": "^1.1.11",
     "jquery": "^3.4.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "moment": "^2.22.2",
     "polish-api-vue": "git://github.com:tuatarapl/polish-api-vue.git",
     "popper.js": "^1.14.4",
