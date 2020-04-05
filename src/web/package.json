@@ -23,7 +23,7 @@
     "ts-loader": "^4.4.2",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
-    "webpack": "^4.16.5",
+    "webpack": "^4.42.1",
     "webpack-cli": "^3.1.0"
   },
   "devDependencies": {
@@ -33,7 +33,7 @@
     "@types/moment": "^2.13.0",
     "@types/vue": "^2.0.0",
     "@types/vue-router": "^2.0.0",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.13.1",
     "sass-loader": "^7.1.0",
     "typescript": "^3.1.6"
   }
