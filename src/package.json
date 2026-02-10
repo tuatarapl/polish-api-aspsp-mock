@@ -63,7 +63,7 @@
     "express": "^4.21.1",
     "express-session": "^1.18.2",
     "jws": "^4.0.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "moment": "^2.29.4",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
